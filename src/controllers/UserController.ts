@@ -4,13 +4,9 @@ import { CreateUserBodyValidations } from "../middlewares/UserValidations";
 import { User } from "../entities/User";
 import { ErrorControl } from "../constants/ErrorControl";
 import { verifyToken } from "../middlewares/jwt";
-import multer from "multer";
-import { FirebaseService } from "../service/firebaseDB";
 import { CheckCache } from "../middlewares/Cache";
 import { HttpStatusCode } from "axios";
 
-const firebaseService = FirebaseService.getInstance();
-const upload = multer();
 
 export class UserController extends UserDAO {
 	private router: Router;
@@ -103,11 +99,10 @@ export class UserController extends UserDAO {
 		// update
 		this.router.put(
 			"/",
-			upload.none(),
 			verifyToken,
 			async (req: Request, res: Response) => {
 				const user = User.fromJson(req.body);
-				const image = req.body.image;
+				/* const image = req.body.image;
 
 				if (image) {
 					if (image.type === "Buffer" && Array.isArray(image.data)) {
@@ -117,7 +112,7 @@ export class UserController extends UserDAO {
 						);
 						user.image = url;
 					}
-				}
+				} */
 				const data = await UserDAO.update(user, req.body.user.id);
 				return res.status(data[2]).send(data[1]);
 			}

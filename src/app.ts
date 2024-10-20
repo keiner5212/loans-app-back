@@ -4,6 +4,7 @@ import morgan from "morgan";
 import { UserController } from "./controllers/UserController";
 import compression from "compression";
 
+
 export class App {
 	private app: Application;
 	private prefix = "/api/v1";

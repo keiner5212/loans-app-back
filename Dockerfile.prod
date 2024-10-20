@@ -1,0 +1,20 @@
+# Usa la imagen base de Node.js 20
+FROM node:20-alpine
+
+# Crea un directorio de trabajo para la app
+WORKDIR /app
+
+# Copia los archivos de la app
+COPY . .
+
+# Instala pnpm globalmente
+RUN npm install -g pnpm
+
+# Instala las dependencias de la app
+RUN pnpm i --production --frozen-lockfile
+
+# Hacer build de la app
+RUN pnpm run build
+
+# Comando para iniciar el servidor
+CMD ["pnpm", "start"]

@@ -1,16 +1,5 @@
 import { config } from "dotenv";
 import { User } from "../entities/User";
-import {
-	addDoc,
-	collection,
-	doc,
-	getDoc,
-	getDocs,
-	query,
-	updateDoc,
-	where,
-} from "firebase/firestore";
-import { FirebaseService } from "../service/firebaseDB";
 import { createDebugger } from "../utils/debugConfig";
 import {
 	ComparePassword,
@@ -22,6 +11,7 @@ import { generateCode } from "../utils/Email/VerificationCode";
 import { Cache } from "../utils/cache";
 import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
 import { HttpStatusCode } from "axios";
+import { PostgresService } from "../service/PostgresDB";
 
 config();
 
@@ -30,15 +20,14 @@ const log = createDebugger("UserDAO");
 const logError = log.extend("error");
 
 const mailService = MailService.getInstance();
-const firebaseService = FirebaseService.getInstance();
-const db = firebaseService.getFirestoreInstance();
+const db = PostgresService.getInstance();
 
 export class UserDAO {
 	protected static async signIn(
 		email: string,
 		password: string
 	): Promise<DaoResponse> {
-		try {
+		/* try {
 			//get user by email
 			const usersRef = collection(db, User.COLLECTION);
 			const q = query(usersRef, where("email", "==", email));
@@ -92,11 +81,23 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		}
+		} */
+
+			return new Promise((resolve, reject) => {
+			
+				setTimeout(() => {
+		
+					resolve( [
+						ErrorControl.PERSONALIZED,
+						"Email not found",
+						HttpStatusCode.NotFound,
+					]);
+				}, 1000);
+			})
 	}
 
 	protected static async add(user: User): Promise<DaoResponse> {
-		try {
+		/* try {
 			// verify if email already exists
 			const usersRef = collection(db, User.COLLECTION);
 			const q = query(usersRef, where("email", "==", user.email));
@@ -129,11 +130,22 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		}
+		} */
+			return new Promise((resolve, reject) => {
+			
+				setTimeout(() => {
+		
+					resolve( [
+						ErrorControl.PERSONALIZED,
+						"Email not found",
+						HttpStatusCode.NotFound,
+					]);
+				}, 1000);
+			})
 	}
 
 	protected static async forgorPassword(email: string): Promise<DaoResponse> {
-		try {
+		/* try {
 			// verify if email already exists
 			const usersRef = collection(db, User.COLLECTION);
 			const q = query(usersRef, where("email", "==", email));
@@ -171,14 +183,25 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		}
+		} */
+			return new Promise((resolve, reject) => {
+			
+				setTimeout(() => {
+		
+					resolve( [
+						ErrorControl.PERSONALIZED,
+						"Email not found",
+						HttpStatusCode.NotFound,
+					]);
+				}, 1000);
+			})
 	}
 
 	protected static async verifyForgotPasswordCode(
 		email: string,
 		code: string
 	): Promise<DaoResponse> {
-		try {
+		/* try {
 			const key = "forgot_password_code_" + email;
 			const cachedCode = Cache.get(key);
 
@@ -210,7 +233,19 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		}
+		} */
+
+			return new Promise((resolve, reject) => {
+			
+				setTimeout(() => {
+		
+					resolve( [
+						ErrorControl.PERSONALIZED,
+						"Email not found",
+						HttpStatusCode.NotFound,
+					]);
+				}, 1000);
+			})
 	}
 
 	protected static async resetPassword(
@@ -218,7 +253,7 @@ export class UserDAO {
 		code: string,
 		password: string
 	): Promise<DaoResponse> {
-		try {
+		/* try {
 			const key = "forgot_password_code_" + email;
 			const cachedCode = Cache.get(key);
 
@@ -274,11 +309,23 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		}
+		} */
+
+			return new Promise((resolve, reject) => {
+			
+				setTimeout(() => {
+		
+					resolve( [
+						ErrorControl.PERSONALIZED,
+						"Email not found",
+						HttpStatusCode.NotFound,
+					]);
+				}, 1000);
+			})
 	}
 
 	protected static async getUserById(id_user: string): Promise<DaoResponse> {
-		try {
+		/* try {
 			const docRef = doc(db, User.COLLECTION, id_user);
 			const docSnap = await getDoc(docRef);
 			if (!docSnap.exists()) {
@@ -301,14 +348,26 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		}
+		} */
+
+			return new Promise((resolve, reject) => {
+			
+				setTimeout(() => {
+		
+					resolve( [
+						ErrorControl.PERSONALIZED,
+						"Email not found",
+						HttpStatusCode.NotFound,
+					]);
+				}, 1000);
+			})
 	}
 
 	protected static async update(
 		user: User,
 		id_user: string
 	): Promise<DaoResponse> {
-		try {
+		/* try {
 			const docRef = doc(db, User.COLLECTION, id_user);
 			const docSnap = await getDoc(docRef);
 			if (!docSnap.exists()) {
@@ -331,5 +390,18 @@ export class UserDAO {
 				HttpStatusCode.InternalServerError,
 			];
 		}
+	 */
+
+		return new Promise((resolve, reject) => {
+			
+			setTimeout(() => {
+	
+				resolve( [
+					ErrorControl.PERSONALIZED,
+					"Email not found",
+					HttpStatusCode.NotFound,
+				]);
+			}, 1000);
+		})
 	}
 }

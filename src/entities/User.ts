@@ -1,8 +1,6 @@
 import { getDateTime } from "../utils/Time";
 
 export class User {
-	public static readonly COLLECTION = "users";
-
 	id_user?: string;
 	name?: string;
 	email?: string;
