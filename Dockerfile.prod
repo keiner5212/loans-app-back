@@ -4,14 +4,17 @@ FROM node:20-alpine
 # Crea un directorio de trabajo para la app
 WORKDIR /app
 
-# Copia los archivos de la app
-COPY . .
+# Copia solo los archivos package.json y pnpm-lock.yaml primero
+COPY package.json pnpm-lock.yaml ./
 
 # Instala pnpm globalmente
 RUN npm install -g pnpm
 
-# Instala las dependencias de la app
+# Instala las dependencias de producción
 RUN pnpm i --production --frozen-lockfile
+
+# Luego copia el resto de los archivos de la app
+COPY . .
 
 # Hacer build de la app
 RUN pnpm run build

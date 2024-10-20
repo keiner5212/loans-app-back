@@ -4,14 +4,17 @@ FROM node:20-alpine
 # Crea un directorio de trabajo para la app
 WORKDIR /app
 
-# Copia los archivos de la app
-COPY . .
+# Copia solo los archivos package.json y pnpm-lock.yaml primero
+COPY package.json pnpm-lock.yaml ./
 
 # Instala pnpm globalmente
 RUN npm install -g pnpm
 
-# Instala las dependencias
+# Instala las dependencias basándote en los archivos de package.json y pnpm-lock.yaml
 RUN pnpm i --frozen-lockfile
+
+# Luego copia el resto de los archivos de la app, ignorando node_modules gracias a .dockerignore
+COPY . .
 
 # Comando para iniciar el entorno de desarrollo
 CMD ["pnpm", "run", "dev"]

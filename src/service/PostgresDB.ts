@@ -1,6 +1,6 @@
-import pgPromise, { IDatabase, IMain } from 'pg-promise';
-import { config } from 'dotenv';
+import { Sequelize } from 'sequelize';
 import { createDebugger } from '../utils/debugConfig';
+import { config } from 'dotenv';
 
 config();
 
@@ -9,21 +9,24 @@ const logError = log.extend('error');
 
 export class PostgresService {
 	private static instance: PostgresService;
-	private db: IDatabase<any>;
-	private pgp: IMain;
-
+	private sequelize: Sequelize;
 
 	private constructor() {
 		const postgresConfig = {
-			user: process.env.POSTGRES_USER,
-			host: process.env.POSTGRES_HOST,
-			database: process.env.POSTGRES_DB,
-			password: process.env.POSTGRES_PASSWORD,
-			port: Number(process.env.POSTGRES_PORT),
+			username: process.env.POSTGRES_USER || '',
+			password: process.env.POSTGRES_PASSWORD || '',
+			database: process.env.POSTGRES_DB || '',
+			host: process.env.POSTGRES_HOST || '',
+			port: Number(process.env.POSTGRES_PORT) || 5432,
+			dialect: 'postgres',
 		};
 
-		this.pgp = pgPromise();
-		this.db = this.pgp(postgresConfig);
+		this.sequelize = new Sequelize(postgresConfig.database, postgresConfig.username, postgresConfig.password, {
+			host: postgresConfig.host,
+			port: postgresConfig.port,
+			dialect: postgresConfig.dialect as any,
+			logging: (msg) => log(msg),
+		});
 
 		this.connect();
 	}
@@ -37,26 +40,45 @@ export class PostgresService {
 
 	private async connect(): Promise<void> {
 		try {
-			await this.db.connect();
-			log('Conectado a la base de datos:', process.env.POSTGRES_DB);
+			await this.sequelize.authenticate();
+			log('Connected to the database:', process.env.POSTGRES_DB);
 		} catch (error) {
-			logError('Error al conectar a la base de datos:', error);
+			logError('Error connecting to the database:', error);
 		}
 	}
 
 	public async query(queryText: string, params?: any[]): Promise<any> {
 		try {
-			const res = await this.db.any(queryText, params);
-			log('Consulta ejecutada:', queryText);
-			return res;
+			const [results] = await this.sequelize.query(queryText, {
+				replacements: params,
+			});
+			log('Query executed:', queryText);
+			return results;
 		} catch (error) {
-			logError('Error en la consulta:', error);
+			logError('Error executing query:', error);
 			throw error;
 		}
 	}
 
 	public async close(): Promise<void> {
-		await this.pgp.end();
-		log('Conexión cerrada');
+		try {
+			await this.sequelize.close();
+			log('Connection closed');
+		} catch (error) {
+			logError('Error closing the connection:', error);
+		}
+	}
+
+	public getSequelize(): Sequelize {
+		return this.sequelize;
+	}
+
+	public static async sync(): Promise<void> {
+		try {
+			await PostgresService.getInstance().sequelize.sync({ alter: true });
+			log('Database synced');
+		} catch (error) {
+			logError('Error syncing the database:', error);
+		}
 	}
 }

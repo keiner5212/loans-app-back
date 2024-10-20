@@ -1,9 +1,8 @@
 {
-  "name": "auth-service",
+  "name": "loan-app",
   "version": "1.0.0",
-  "description": "",
   "scripts": {
-    "dev": "nodemon ./src/index.ts",
+    "dev": "nodemon -L ./src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "lint": "eslint . --fix",
@@ -26,9 +25,9 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "multer": "1.4.5-lts.1",
     "nodemailer": "^6.9.15",
-    "pg-promise": "^11.10.1"
+    "pg": "^8.13.0",
+    "sequelize": "^6.37.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

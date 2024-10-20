@@ -11,7 +11,6 @@ import { generateCode } from "../utils/Email/VerificationCode";
 import { Cache } from "../utils/cache";
 import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
 import { HttpStatusCode } from "axios";
-import { PostgresService } from "../service/PostgresDB";
 
 config();
 
@@ -20,36 +19,26 @@ const log = createDebugger("UserDAO");
 const logError = log.extend("error");
 
 const mailService = MailService.getInstance();
-const db = PostgresService.getInstance();
 
 export class UserDAO {
 	protected static async signIn(
 		email: string,
 		password: string
 	): Promise<DaoResponse> {
-		/* try {
-			//get user by email
-			const usersRef = collection(db, User.COLLECTION);
-			const q = query(usersRef, where("email", "==", email));
-			const querySnapshot = await getDocs(q);
+		try {
+			// get user
+			const user = await User.findOne({ where: { email } });
 
-			if (querySnapshot.empty) {
+			if (!user) {
 				return [
 					ErrorControl.PERSONALIZED,
 					"User not found",
 					HttpStatusCode.NotFound,
 				];
 			}
-			const user = User.fromJson({
-				...querySnapshot.docs[0].data(),
-				id_user: querySnapshot.docs[0].id,
-			});
 
-			//compare password
-			const passwordMatch = await ComparePassword(
-				password,
-				user.password
-			);
+			// Compare password
+			const passwordMatch = await ComparePassword(password, user.password);
 			if (!passwordMatch) {
 				return [
 					ErrorControl.PERSONALIZED,
@@ -58,14 +47,15 @@ export class UserDAO {
 				];
 			}
 
-			// create token and return it
+			// Create token with JWT
 			const token = sign(
-				{ id: user.id_user, email },
+				{ id: user.id, email, role: user.role },
 				process.env.JWT_SECRET as string,
 				{
-					expiresIn: process.env.JWT_EXPIRATION_TIME,
+					expiresIn: process.env.JWT_EXPIRATION_TIME === "x" ? undefined : process.env.JWT_EXPIRATION_TIME,
 				}
 			);
+
 			return [
 				ErrorControl.SUCCESS,
 				{
@@ -81,29 +71,13 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		} */
-
-			return new Promise((resolve, reject) => {
-			
-				setTimeout(() => {
-		
-					resolve( [
-						ErrorControl.PERSONALIZED,
-						"Email not found",
-						HttpStatusCode.NotFound,
-					]);
-				}, 1000);
-			})
+		}
 	}
-
 	protected static async add(user: User): Promise<DaoResponse> {
-		/* try {
-			// verify if email already exists
-			const usersRef = collection(db, User.COLLECTION);
-			const q = query(usersRef, where("email", "==", user.email));
-			const querySnapshot = await getDocs(q);
-
-			if (!querySnapshot.empty) {
+		try {
+			// Verify if email already exists
+			const existingUser = await User.findOne({ where: { email: user.email } });
+			if (existingUser) {
 				return [
 					ErrorControl.PERSONALIZED,
 					"Email already exists",
@@ -111,47 +85,29 @@ export class UserDAO {
 				];
 			}
 
-			// encrypt password
+			// Encrypt password
 			user.password = await EncriptPassword(user.password);
-			// convert user to json
-			const userTosave = user.toSaveJson();
-			// save user
-			const docRef = await addDoc(
-				collection(db, User.COLLECTION),
-				userTosave
-			);
-			log("Document written with ID: %s", docRef.id);
-			return [ErrorControl.SUCCESS, docRef.id, HttpStatusCode.Created];
+
+			// Save user
+			const newUser = await User.create(user);
+
+			log("User created with ID: " + newUser.id);
+			return [ErrorControl.SUCCESS, newUser.id, HttpStatusCode.Created];
 		} catch (error) {
-			const msg = "Error adding document";
+			const msg = "Error in add user";
 			logError(msg + ": " + error);
 			return [
 				ErrorControl.ERROR,
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		} */
-			return new Promise((resolve, reject) => {
-			
-				setTimeout(() => {
-		
-					resolve( [
-						ErrorControl.PERSONALIZED,
-						"Email not found",
-						HttpStatusCode.NotFound,
-					]);
-				}, 1000);
-			})
+		}
 	}
-
 	protected static async forgorPassword(email: string): Promise<DaoResponse> {
-		/* try {
-			// verify if email already exists
-			const usersRef = collection(db, User.COLLECTION);
-			const q = query(usersRef, where("email", "==", email));
-			const querySnapshot = await getDocs(q);
-
-			if (querySnapshot.empty) {
+		try {
+			// Verify if email exists
+			const existingUser = await User.findOne({ where: { email } });
+			if (!existingUser) {
 				return [
 					ErrorControl.PERSONALIZED,
 					"Email not found",
@@ -159,8 +115,10 @@ export class UserDAO {
 				];
 			}
 
+			// Generate a verification code
 			const code = generateCode(6);
 
+			// Send the verification code via email
 			const info = await mailService.sendMail({
 				from: mailService.fromDefault,
 				to: email,
@@ -168,9 +126,12 @@ export class UserDAO {
 				text: "Your verification code: " + code,
 			});
 
+			// Check if the email was sent successfully
 			if (!info[0]) {
 				throw new Error("Email not sent, error: " + info[1]);
 			}
+
+			// Store the verification code in cache
 			const key = "forgot_password_code_" + email;
 			Cache.set(key, code);
 
@@ -183,28 +144,19 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		} */
-			return new Promise((resolve, reject) => {
-			
-				setTimeout(() => {
-		
-					resolve( [
-						ErrorControl.PERSONALIZED,
-						"Email not found",
-						HttpStatusCode.NotFound,
-					]);
-				}, 1000);
-			})
+		}
 	}
-
 	protected static async verifyForgotPasswordCode(
 		email: string,
 		code: string
 	): Promise<DaoResponse> {
-		/* try {
+		try {
+			// Create a key for the cached verification code
 			const key = "forgot_password_code_" + email;
+			// Retrieve the cached code from cache
 			const cachedCode = Cache.get(key);
 
+			// Check if the code is not found in the cache
 			if (!cachedCode) {
 				return [
 					ErrorControl.PERSONALIZED,
@@ -213,6 +165,7 @@ export class UserDAO {
 				];
 			}
 
+			// Verify if the provided code matches the cached code
 			if (cachedCode !== code) {
 				return [
 					ErrorControl.PERSONALIZED,
@@ -221,7 +174,7 @@ export class UserDAO {
 				];
 			}
 
-			// make sure code is not expired
+			// Make sure the code is not expired by making it infinite in the cache
 			Cache.makeInfinite(key);
 
 			return [ErrorControl.SUCCESS, "Code correct", HttpStatusCode.Ok];
@@ -233,30 +186,20 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		} */
-
-			return new Promise((resolve, reject) => {
-			
-				setTimeout(() => {
-		
-					resolve( [
-						ErrorControl.PERSONALIZED,
-						"Email not found",
-						HttpStatusCode.NotFound,
-					]);
-				}, 1000);
-			})
+		}
 	}
-
 	protected static async resetPassword(
 		email: string,
 		code: string,
 		password: string
 	): Promise<DaoResponse> {
-		/* try {
+		try {
+			// Create a key for the cached verification code
 			const key = "forgot_password_code_" + email;
+			// Retrieve the cached code from cache
 			const cachedCode = Cache.get(key);
 
+			// Check if the code is not found in the cache
 			if (!cachedCode) {
 				return [
 					ErrorControl.PERSONALIZED,
@@ -265,6 +208,7 @@ export class UserDAO {
 				];
 			}
 
+			// Verify if the provided code matches the cached code
 			if (cachedCode !== code) {
 				return [
 					ErrorControl.PERSONALIZED,
@@ -272,17 +216,18 @@ export class UserDAO {
 					HttpStatusCode.BadRequest,
 				];
 			}
-			// remove code
+
+			// Remove the code from the cache
 			Cache.delete(key);
 
-			// encrypt password
+			// Encrypt the new password
 			const hashedPassword = await EncriptPassword(password);
-			// update password
-			const usersRef = collection(db, User.COLLECTION);
-			const q = query(usersRef, where("email", "==", email));
-			const querySnapshot = await getDocs(q);
 
-			if (querySnapshot.empty) {
+			// Find the user by email using Sequelize
+			const user = await User.findOne({ where: { email } });
+
+			// Check if the user exists
+			if (!user) {
 				return [
 					ErrorControl.PERSONALIZED,
 					"Email not found",
@@ -290,11 +235,9 @@ export class UserDAO {
 				];
 			}
 
-			const userRef = querySnapshot.docs[0].ref;
-
-			await updateDoc(userRef, {
-				password: hashedPassword,
-			});
+			// Update the user's password in the database
+			user.password = hashedPassword;
+			await user.save(); // Save the updated user object
 
 			return [
 				ErrorControl.SUCCESS,
@@ -309,26 +252,14 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		} */
+		}
+	} protected static async getUserById(id_user: string): Promise<DaoResponse> {
+		try {
+			// Find the user by ID using Sequelize
+			const user = await User.findOne({ where: { id: id_user } });
 
-			return new Promise((resolve, reject) => {
-			
-				setTimeout(() => {
-		
-					resolve( [
-						ErrorControl.PERSONALIZED,
-						"Email not found",
-						HttpStatusCode.NotFound,
-					]);
-				}, 1000);
-			})
-	}
-
-	protected static async getUserById(id_user: string): Promise<DaoResponse> {
-		/* try {
-			const docRef = doc(db, User.COLLECTION, id_user);
-			const docSnap = await getDoc(docRef);
-			if (!docSnap.exists()) {
+			// Check if the user exists
+			if (!user) {
 				return [
 					ErrorControl.PERSONALIZED,
 					"User not found",
@@ -336,9 +267,9 @@ export class UserDAO {
 				];
 			}
 
-			const user = User.fromJson(docSnap.data());
-			// delete password
+			// delete sensitive information like password before returning
 			user.deletePrivateData();
+
 			return [ErrorControl.SUCCESS, user, HttpStatusCode.Ok];
 		} catch (error) {
 			const msg = "Error getting user";
@@ -348,29 +279,19 @@ export class UserDAO {
 				msg,
 				HttpStatusCode.InternalServerError,
 			];
-		} */
-
-			return new Promise((resolve, reject) => {
-			
-				setTimeout(() => {
-		
-					resolve( [
-						ErrorControl.PERSONALIZED,
-						"Email not found",
-						HttpStatusCode.NotFound,
-					]);
-				}, 1000);
-			})
+		}
 	}
 
 	protected static async update(
-		user: User,
+		userData: User,
 		id_user: string
 	): Promise<DaoResponse> {
-		/* try {
-			const docRef = doc(db, User.COLLECTION, id_user);
-			const docSnap = await getDoc(docRef);
-			if (!docSnap.exists()) {
+		try {
+			// Find the user by ID
+			const user = await User.findOne({ where: { id: id_user } });
+
+			// Check if the user exists
+			if (!user) {
 				return [
 					ErrorControl.PERSONALIZED,
 					"User not found",
@@ -378,7 +299,8 @@ export class UserDAO {
 				];
 			}
 
-			await updateDoc(docRef, user.toUpdateJson(docSnap.data()));
+			// Update user fields using the provided userData
+			await user.update(userData);
 
 			return [ErrorControl.SUCCESS, "User updated", HttpStatusCode.Ok];
 		} catch (error) {
@@ -390,18 +312,6 @@ export class UserDAO {
 				HttpStatusCode.InternalServerError,
 			];
 		}
-	 */
-
-		return new Promise((resolve, reject) => {
-			
-			setTimeout(() => {
-	
-				resolve( [
-					ErrorControl.PERSONALIZED,
-					"Email not found",
-					HttpStatusCode.NotFound,
-				]);
-			}, 1000);
-		})
 	}
+
 }

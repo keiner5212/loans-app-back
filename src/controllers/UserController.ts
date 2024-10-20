@@ -1,12 +1,10 @@
 import { Request, Response, Router } from "express";
 import { UserDAO } from "../dao/UserDAO";
 import { CreateUserBodyValidations } from "../middlewares/UserValidations";
-import { User } from "../entities/User";
 import { ErrorControl } from "../constants/ErrorControl";
 import { verifyToken } from "../middlewares/jwt";
 import { CheckCache } from "../middlewares/Cache";
 import { HttpStatusCode } from "axios";
-
 
 export class UserController extends UserDAO {
 	private router: Router;
@@ -17,7 +15,7 @@ export class UserController extends UserDAO {
 	}
 
 	public routes(): Router {
-		//token verification
+		// Token verification
 		this.router.get(
 			"/verifyToken",
 			verifyToken,
@@ -28,14 +26,13 @@ export class UserController extends UserDAO {
 			}
 		);
 
-		// add
+		// Add user
 		this.router.post(
 			"/",
 			CreateUserBodyValidations,
 			async (req: Request, res: Response) => {
-				const user = User.fromJson(req.body);
-				const data = await UserDAO.add(user);
-				if (data[0] == ErrorControl.SUCCESS) {
+				const data = await UserDAO.add(req.body);
+				if (data[0] === ErrorControl.SUCCESS) {
 					return res
 						.status(data[2])
 						.send("User created successfully: " + data[1]);
@@ -44,7 +41,7 @@ export class UserController extends UserDAO {
 			}
 		);
 
-		// get user
+		// Get user
 		this.router.get(
 			"/",
 			verifyToken,
@@ -56,14 +53,14 @@ export class UserController extends UserDAO {
 			}
 		);
 
-		// sign in
+		// Sign in
 		this.router.post("/signin", async (req: Request, res: Response) => {
 			const { email, password } = req.body;
 			const data = await UserDAO.signIn(email, password);
 			return res.status(data[2]).send(data[1]);
 		});
 
-		// forgot password (send)
+		// Forgot password (send)
 		this.router.post(
 			"/forgot_password",
 			async (req: Request, res: Response) => {
@@ -73,20 +70,17 @@ export class UserController extends UserDAO {
 			}
 		);
 
-		// forgot password (verify code)
+		// Forgot password (verify code)
 		this.router.post(
 			"/forgot_password/verify_code",
 			async (req: Request, res: Response) => {
 				const { email, code } = req.body;
-				const data = await UserDAO.verifyForgotPasswordCode(
-					email,
-					code
-				);
+				const data = await UserDAO.verifyForgotPasswordCode(email, code);
 				return res.status(data[2]).send(data[1]);
 			}
 		);
 
-		// forgot password (reset)
+		// Forgot password (reset)
 		this.router.post(
 			"/forgot_password/reset",
 			async (req: Request, res: Response) => {
@@ -96,28 +90,28 @@ export class UserController extends UserDAO {
 			}
 		);
 
-		// update
+		// Update user
 		this.router.put(
 			"/",
 			verifyToken,
 			async (req: Request, res: Response) => {
-				const user = User.fromJson(req.body);
-				/* const image = req.body.image;
+				const userId = req.body.user.id;
 
-				if (image) {
-					if (image.type === "Buffer" && Array.isArray(image.data)) {
-						const url = await firebaseService.uploadImage(
-							Buffer.from(image.data),
-							req.body.user.id + ".jpg"
-						);
-						user.image = url;
-					}
+				// Optional: Handle image upload logic here
+				/* if (userData.image) {
+					const imageUrl = await this.handleImageUpload(userData.image, userId);
+					userData.image = imageUrl; // Assuming the image upload function returns the URL
 				} */
-				const data = await UserDAO.update(user, req.body.user.id);
+
+				const data = await UserDAO.update(req.body, userId);
+				if (data[0] === ErrorControl.SUCCESS) {
+					return res.status(data[2]).send(data[1]);
+				}
 				return res.status(data[2]).send(data[1]);
 			}
 		);
 
 		return this.router;
 	}
+
 }
