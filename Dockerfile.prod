@@ -11,7 +11,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm
 
 # Instala las dependencias de producción
-RUN pnpm i --production --frozen-lockfile
+RUN pnpm i --production
 
 # Luego copia el resto de los archivos de la app
 COPY . .

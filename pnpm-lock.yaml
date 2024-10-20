@@ -8,6 +8,39 @@ importers:
 
   .:
     dependencies:
+      '@types/bcryptjs':
+        specifier: ^2.4.6
+        version: 2.4.6
+      '@types/compression':
+        specifier: ^1.7.5
+        version: 1.7.5
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.17
+      '@types/crypto-js':
+        specifier: ^4.2.2
+        version: 4.2.2
+      '@types/debug':
+        specifier: ^4.1.12
+        version: 4.1.12
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      '@types/jest':
+        specifier: ^29.5.12
+        version: 29.5.12
+      '@types/jsonwebtoken':
+        specifier: ^9.0.6
+        version: 9.0.6
+      '@types/morgan':
+        specifier: ^1.9.9
+        version: 1.9.9
+      '@types/multer':
+        specifier: ^1.4.12
+        version: 1.4.12
+      '@types/node':
+        specifier: ^20.14.11
+        version: 20.14.11
       '@types/nodemailer':
         specifier: ^6.4.15
         version: 6.4.15
@@ -56,6 +89,9 @@ importers:
       sequelize:
         specifier: ^6.37.4
         version: 6.37.4(pg@8.13.0)
+      typescript:
+        specifier: ^5.5.3
+        version: 5.5.3
     devDependencies:
       '@eslint/js':
         specifier: ^9.8.0
@@ -63,39 +99,6 @@ importers:
       '@jest/globals':
         specifier: ^29.7.0
         version: 29.7.0
-      '@types/bcryptjs':
-        specifier: ^2.4.6
-        version: 2.4.6
-      '@types/compression':
-        specifier: ^1.7.5
-        version: 1.7.5
-      '@types/cors':
-        specifier: ^2.8.17
-        version: 2.8.17
-      '@types/crypto-js':
-        specifier: ^4.2.2
-        version: 4.2.2
-      '@types/debug':
-        specifier: ^4.1.12
-        version: 4.1.12
-      '@types/express':
-        specifier: ^4.17.21
-        version: 4.17.21
-      '@types/jest':
-        specifier: ^29.5.12
-        version: 29.5.12
-      '@types/jsonwebtoken':
-        specifier: ^9.0.6
-        version: 9.0.6
-      '@types/morgan':
-        specifier: ^1.9.9
-        version: 1.9.9
-      '@types/multer':
-        specifier: ^1.4.12
-        version: 1.4.12
-      '@types/node':
-        specifier: ^20.14.11
-        version: 20.14.11
       eslint:
         specifier: 9.x
         version: 9.8.0
@@ -114,9 +117,6 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.14.11)(typescript@5.5.3)
-      typescript:
-        specifier: ^5.5.3
-        version: 5.5.3
       typescript-eslint:
         specifier: ^7.18.0
         version: 7.18.0(eslint@9.8.0)(typescript@5.5.3)
