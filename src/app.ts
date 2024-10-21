@@ -3,9 +3,9 @@ import express, { Application, Request, Response } from "express";
 import morgan from "morgan";
 import { UserController } from "./controllers/UserController";
 import compression from "compression";
-import { PostgresService } from "./service/PostgresDB";
-import { Migrations } from "./entities/Migrations";
+import { config } from "dotenv";
 
+config()
 
 export class App {
 	private app: Application;
@@ -63,8 +63,7 @@ export class App {
 		this.generalRoutes();
 		this.controllerRoutes();
 		this.NotFound();
-		
-		Migrations();
+
 		return this.app;
 	}
 }

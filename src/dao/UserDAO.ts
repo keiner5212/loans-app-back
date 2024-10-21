@@ -73,7 +73,7 @@ export class UserDAO {
 			];
 		}
 	}
-	protected static async add(user: User): Promise<DaoResponse> {
+	protected static async add(user: Omit<User, "id">): Promise<DaoResponse> {
 		try {
 			// Verify if email already exists
 			const existingUser = await User.findOne({ where: { email: user.email } });
@@ -283,7 +283,7 @@ export class UserDAO {
 	}
 
 	protected static async update(
-		userData: User,
+		userData: Omit<User, "id">,
 		id_user: string
 	): Promise<DaoResponse> {
 		try {

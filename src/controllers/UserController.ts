@@ -96,13 +96,6 @@ export class UserController extends UserDAO {
 			verifyToken,
 			async (req: Request, res: Response) => {
 				const userId = req.body.user.id;
-
-				// Optional: Handle image upload logic here
-				/* if (userData.image) {
-					const imageUrl = await this.handleImageUpload(userData.image, userId);
-					userData.image = imageUrl; // Assuming the image upload function returns the URL
-				} */
-
 				const data = await UserDAO.update(req.body, userId);
 				if (data[0] === ErrorControl.SUCCESS) {
 					return res.status(data[2]).send(data[1]);
