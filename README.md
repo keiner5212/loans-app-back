@@ -6,15 +6,17 @@
 - [Docker](https://www.docker.com/) (>= 20.10.9)
 
 ## How to set up the project on docker
-1. Create docker volume if not exist
+1. Configure your `.env` file following the example in `.env.example`
+
+2. Create docker volume if not exist
     ```bash
     docker volume create postgres_data
     ```
-2. Run the project on the mode dev
+3. Run the project on the mode dev
     ```bash
     docker-compose -f docker-compose.dev.yml up --build -d
     ```
-3. Run the project on the mode prod
+4. Run the project on the mode prod
     ```bash
     docker-compose -f docker-compose.prod.yml up --build -d
     ```

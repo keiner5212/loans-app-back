@@ -1,6 +1,12 @@
 import { DataTypes, Model } from "sequelize";
 import { User } from "./User";
 
+export enum Status {
+    APPROVED = "APPROVED",
+    REJECTED = "REJECTED",
+    PENDING = "PENDING",
+}
+
 /**
  * Credit model
  * 
@@ -25,7 +31,7 @@ export const creditDDL = {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
-		autoIncrement: true,
+        autoIncrement: true,
     },
     userId: {
         type: DataTypes.INTEGER,
