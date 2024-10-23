@@ -6,7 +6,8 @@ import { createDebugger } from "../utils/debugConfig";
 
 config();
 
-const middlewareDebugger = createDebugger("jwt");
+const log = createDebugger("jwt");
+const logError = log.extend("error");
 /**
  * Verify token
  * @param req
@@ -22,7 +23,7 @@ export const verifyToken = (
 	const token = authHeader?.split(" ")[1];
 
 	if (token == null) {
-		middlewareDebugger("Access denied. No token provided.");
+		log("Access denied. No token provided.");
 		return res
 			.status(HttpStatusCode.Unauthorized)
 			.send("Access denied. No token provided.");
@@ -33,7 +34,7 @@ export const verifyToken = (
 		process.env.JWT_SECRET as string,
 		(err: any, payload: any) => {
 			if (err) {
-				middlewareDebugger("Invalid token:", token);
+				logError("Invalid token:", token);
 				return res
 					.status(HttpStatusCode.Forbidden)
 					.send("Invalid token.");

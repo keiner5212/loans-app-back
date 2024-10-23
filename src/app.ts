@@ -4,6 +4,9 @@ import morgan from "morgan";
 import { UserController } from "./controllers/UserController";
 import compression from "compression";
 import { config } from "dotenv";
+import { CreditController } from "./controllers/CreditController";
+import { PaymentController } from "./controllers/PaymentController";
+import { FinancingController } from "./controllers/FinancingController";
 
 config()
 
@@ -46,8 +49,10 @@ export class App {
 
 	private controllerRoutes() {
 		// Controllers ROUTES
-		this.app.use(this.prefix + "/user", new UserController().routes());
-
+		this.app.use(this.prefix + "/user", new UserController().routes())
+		this.app.use(this.prefix + "/credit", new CreditController().routes())
+		this.app.use(this.prefix + "/payment", new PaymentController().routes())
+		this.app.use(this.prefix + "/financing", new FinancingController().routes())
 	}
 
 	private NotFound() {
