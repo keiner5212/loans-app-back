@@ -52,7 +52,7 @@ export class UserDAO {
 				{ id: user.id, email, role: user.role },
 				process.env.JWT_SECRET as string,
 				{
-					expiresIn: process.env.JWT_EXPIRATION_TIME === "x" ? undefined : process.env.JWT_EXPIRATION_TIME,
+					expiresIn: process.env.JWT_EXPIRATION_TIME,
 				}
 			);
 
