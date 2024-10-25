@@ -8,6 +8,8 @@ import { User } from "./User"
  * 
  * field - `id` is the primary key,
  * field - `creditId` is a foreign key to `Credit` model,
+ * field - `userId` is a foreign key to `User` model, is the user who made the payment,
+ * field - `userCreatorId` is a foreign key to `User` model, is the employee who saved the payment,
  * field - `amount` is the amount of the payment,
  * field - `period` is the period of the payment,
  * field - `date` is the date of the payment,
@@ -17,6 +19,7 @@ export class Payment extends Model {
     public id!: number
     public creditId!: number
     public userId!: number
+    public userCreatorId!: number
     public amount!: number
     public period!: number
     public date!: Date
@@ -39,6 +42,14 @@ export const paymentDDL = {
         },
     },
     userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id',
+        },
+    },
+    userCreatorId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

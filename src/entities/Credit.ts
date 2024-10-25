@@ -11,7 +11,9 @@ export enum Status {
  * Credit model
  * 
  * field - `id` is the primary key,
- * field - `userId` is a foreign key to `User` model,
+ * field - `userId` is a foreign key to `User` model, is the user who applied for the credit,
+ * field - `userCreatorId` is a foreign key to `User` model, is the employee who created the credit application,
+ * field - `numberOfPayments` is the number of payments for the credit,
  * field - `requestedAmount` is the amount requested for the credit,
  * field - `interestRate` is the interest rate of the credit,
  * field - `status` is an indicator of the status of the credit,
@@ -20,8 +22,10 @@ export enum Status {
 export class Credit extends Model {
     public id?: number;
     public userId!: number;
+    public userCreatorId!: number;
     public requestedAmount!: number;
     public interestRate!: number;
+    public numberOfPayments!: number;
     public status!: string;
     public applicationDate!: Date;
 }
@@ -41,12 +45,24 @@ export const creditDDL = {
             key: 'id',
         },
     },
+    userCreatorId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: User,
+            key: 'id',
+        },
+    },
     requestedAmount: {
         type: DataTypes.DOUBLE,
         allowNull: false,
     },
     interestRate: {
         type: DataTypes.DOUBLE,
+        allowNull: false,
+    },
+    numberOfPayments: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     status: {

@@ -17,7 +17,7 @@ export const CreateUserBodyValidations = (
 		document: Joi.string().required().allow(""),
 		phone: Joi.string().required().allow(""),
 		role: Joi.string().required().allow(""),
-		password: Joi.string().required(),
+		password: Joi.string().optional().default("123456"),
 	});
 
 	const { error } = schema.validate(req.body);
