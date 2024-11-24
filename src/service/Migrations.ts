@@ -1,10 +1,12 @@
-import { User, userDDL } from "./User";
-import { PostgresService } from "../service/PostgresDB";
-import { Credit, creditDDL } from "./Credit";
-import { Financing, financingDDL } from "./Financing";
 import { Sequelize } from "sequelize";
 import { createDebugger } from "../utils/debugConfig";
-import { Payment, paymentDDL } from "./Payment";
+import { PostgresService } from "./PostgresDB";
+import { User, userDDL } from "../entities/User";
+import { Credit, creditDDL } from "../entities/Credit";
+import { Financing, financingDDL } from "../entities/Financing";
+import { Payment, paymentDDL } from "../entities/Payment";
+import { seedUsers } from "./seed/UserSeed";
+
 
 const log = createDebugger('migrations');
 
@@ -78,7 +80,7 @@ export async function Migrations() {
         }
     )
 
-
-
     await PostgresService.sync();
+
+    await seedUsers();
 }

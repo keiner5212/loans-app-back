@@ -11,6 +11,7 @@ import { generateCode } from "../utils/Email/VerificationCode";
 import { Cache } from "../utils/cache";
 import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
 import { HttpStatusCode } from "axios";
+import { Roles } from "../constants/Roles";
 
 config();
 
@@ -103,6 +104,7 @@ export class UserDAO {
 			];
 		}
 	}
+
 	protected static async forgorPassword(email: string): Promise<DaoResponse> {
 		try {
 			// Verify if email exists
@@ -118,12 +120,41 @@ export class UserDAO {
 			// Generate a verification code
 			const code = generateCode(6);
 
-			// Send the verification code via email
+			// get masters users
+			const masters = await User.findAll({ where: { role: Roles.USER_MASTER } });
+
+			// if theres only one master (make sure is not the default)
+			if (masters.length === 1) {
+				const master = masters[0];
+				if (master.email !== "admin@admin.admin") {
+					await mailService.sendMail({
+						from: mailService.fromDefault,
+						to: master.email,
+						subject: "Forgot password code",
+						text: "The user " + email + " requested a password reset, code: " + code,
+					});
+				} else {
+					return [ErrorControl.PERSONALIZED, "There is no master user, can't send email to the default user", HttpStatusCode.BadRequest];
+				}
+			} else {
+				for (const master of masters) {
+					if (master.email !== "admin@admin.admin") {
+						await mailService.sendMail({
+							from: mailService.fromDefault,
+							to: master.email,
+							subject: "Forgot password code",
+							text: "The user " + email + " requested a password reset, code: " + code,
+						});
+					}
+				}
+			}
+
+			// Send and advice via email
 			const info = await mailService.sendMail({
 				from: mailService.fromDefault,
 				to: email,
 				subject: "Forgot password",
-				text: "Your verification code: " + code,
+				text: "You are trying to reset your password, your code, reach out an master user to get the verification",
 			});
 
 			// Check if the email was sent successfully
@@ -146,6 +177,7 @@ export class UserDAO {
 			];
 		}
 	}
+
 	protected static async verifyForgotPasswordCode(
 		email: string,
 		code: string
@@ -188,6 +220,7 @@ export class UserDAO {
 			];
 		}
 	}
+
 	protected static async resetPassword(
 		email: string,
 		code: string,
@@ -253,7 +286,9 @@ export class UserDAO {
 				HttpStatusCode.InternalServerError,
 			];
 		}
-	} protected static async getUserById(id_user: string): Promise<DaoResponse> {
+	}
+
+	protected static async getUserById(id_user: string): Promise<DaoResponse> {
 		try {
 			// Find the user by ID using Sequelize
 			const user = await User.findOne({ where: { id: id_user } });

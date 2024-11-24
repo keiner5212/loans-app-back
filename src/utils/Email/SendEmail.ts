@@ -13,7 +13,7 @@ interface MailOptions {
 	text: string;
 }
 
-const appName = process.env.APP_NAME || "Opa";
+const appName = process.env.APP_NAME || "No name Configured";
 
 export class MailService {
 	private static instance: MailService;
@@ -32,7 +32,7 @@ export class MailService {
 			},
 		});
 
-		this.fromDefault = `Skillwork <${process.env.EMAIL_USER}>`;
+		this.fromDefault = `${appName} <${process.env.EMAIL_USER}>`;
 
 		// Verify connection configuration
 		this.transporter.verify((error, success) => {
@@ -60,22 +60,22 @@ export class MailService {
 				to: mailOptions.to,
 				subject: mailOptions.subject,
 				html: `
-          <h1>${appName}</h1>
-          <p>Hello from ${appName}, you have a new message:</p>
-          <br>
-          <p>${mailOptions.text}</p>
-          <br>
-          <p>Regards,</p>
-          <p>Skillwork Team</p>
-        `,
+					<h1>${appName}</h1>
+					<p>Hello from ${appName}, you have a new message:</p>
+					<br>
+					<p>${mailOptions.text}</p>
+					<br>
+					<p>Regards,</p>
+					<p>${appName} Team</p>
+					`,
 			};
 
 			const info = await this.transporter.sendMail(options);
 			log(
 				"Email sent to: " +
-					mailOptions.to +
-					" with response: " +
-					info.response
+				mailOptions.to +
+				" with response: " +
+				info.response
 			);
 			return [true, info];
 		} catch (error) {

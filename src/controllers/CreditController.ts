@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { CreditDao } from "../dao/CreditDAO";
 import { verifyToken } from "../middlewares/jwt";
 import { isUserAdmin, isUserRecovery } from "../middlewares/Roles";
@@ -17,7 +17,7 @@ export class CreditController extends CreditDao {
       "/users/:id",
       verifyToken,
       isUserRecovery,
-      async (req, res) => {
+      async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
         const data = await CreditDao.getCreditByUserId(id);
         if (data[0] === ErrorControl.SUCCESS) {
@@ -29,7 +29,7 @@ export class CreditController extends CreditDao {
       }
     );
 
-    this.router.get("/:id", verifyToken, isUserRecovery, async (req, res) => {
+    this.router.get("/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const data = await CreditDao.getCreditById(id);
       if (data[0] === ErrorControl.SUCCESS) {
@@ -40,7 +40,7 @@ export class CreditController extends CreditDao {
       return res.status(data[2]).send(data[1]);
     });
 
-    this.router.post("/", verifyToken, isUserRecovery, async (req, res) => {
+    this.router.post("/", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
       const data = await CreditDao.add(req.body);
       if (data[0] === ErrorControl.SUCCESS) {
         return res
@@ -54,7 +54,7 @@ export class CreditController extends CreditDao {
       "/aprove/:id",
       verifyToken,
       isUserRecovery,
-      async (req, res) => {
+      async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
         const data = await CreditDao.approve(id);
         if (data[0] === ErrorControl.SUCCESS) {
@@ -70,7 +70,7 @@ export class CreditController extends CreditDao {
       "/reject/:id",
       verifyToken,
       isUserAdmin,
-      async (req, res) => {
+      async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
         const data = await CreditDao.reject(id);
         if (data[0] === ErrorControl.SUCCESS) {
@@ -82,7 +82,7 @@ export class CreditController extends CreditDao {
       }
     );
 
-    this.router.put("/:id", verifyToken, isUserRecovery, async (req, res) => {
+    this.router.put("/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const data = await CreditDao.update(req.body, id);
       if (data[0] === ErrorControl.SUCCESS) {
@@ -97,7 +97,7 @@ export class CreditController extends CreditDao {
       "/:id",
       verifyToken,
       isUserAdmin,
-      async (req, res) => {
+      async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
         const data = await CreditDao.delete(id);
         if (data[0] === ErrorControl.SUCCESS) {

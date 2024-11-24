@@ -2,7 +2,7 @@ import { config } from "dotenv";
 import { createDebugger } from "./utils/debugConfig";
 import { App } from "./app";
 import { getLocalIP } from "./utils/net/LocalIp";
-import { createDatabase, Migrations } from "./entities/Migrations";
+import { createDatabase, Migrations } from "./service/Migrations";
 
 // CONFIGURATION
 config();

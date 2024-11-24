@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { FinancingDAO } from "../dao/FinancingDAO";
 import { ErrorControl } from "../constants/ErrorControl";
 
@@ -11,7 +11,7 @@ export class FinancingController extends FinancingDAO {
   }
 
   public routes(): Router {
-    this.router.get("/user/:id", async (req, res) => {
+    this.router.get("/user/:id", async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const data = await FinancingDAO.getFinancingByUserId(id);
       if (data[0] === ErrorControl.SUCCESS) {
@@ -22,7 +22,7 @@ export class FinancingController extends FinancingDAO {
       return res.status(data[2]).send(data[1]);
     });
 
-    this.router.get("/:id", async (req, res) => {
+    this.router.get("/:id", async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const data = await FinancingDAO.getFinancingById(id);
       if (data[0] === ErrorControl.SUCCESS) {
@@ -33,7 +33,7 @@ export class FinancingController extends FinancingDAO {
       return res.status(data[2]).send(data[1]);
     });
 
-    this.router.post("/", async (req, res) => {
+    this.router.post("/", async (req: Request, res: Response) => {
       const data = await FinancingDAO.add(req.body);
       if (data[0] === ErrorControl.SUCCESS) {
         return res
@@ -43,7 +43,7 @@ export class FinancingController extends FinancingDAO {
       return res.status(data[2]).send(data[1]);
     });
 
-    this.router.put("/:id", async (req, res) => {
+    this.router.put("/:id", async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const data = await FinancingDAO.update(req.body, id);
       if (data[0] === ErrorControl.SUCCESS) {
@@ -54,7 +54,7 @@ export class FinancingController extends FinancingDAO {
       return res.status(data[2]).send(data[1]);
     });
 
-    this.router.delete("/:id", async (req, res) => {
+    this.router.delete("/:id", async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const data = await FinancingDAO.delete(id);
       if (data[0] === ErrorControl.SUCCESS) {

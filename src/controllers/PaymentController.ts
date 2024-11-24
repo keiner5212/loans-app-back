@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { PaymentDAO } from "../dao/PaymentDAO";
 import { ErrorControl } from "../constants/ErrorControl";
 
@@ -11,7 +11,7 @@ export class PaymentController extends PaymentDAO {
 
     public routes(): Router {
 
-        this.router.get("/user/:userId/credit/:creditId", async (req, res) => {
+        this.router.get("/user/:userId/credit/:creditId", async (req: Request, res: Response) => {
             const userId = parseInt(req.params.userId);
             const creditId = parseInt(req.params.creditId);
             const data = await PaymentDAO.getPaymentByCreditIdAndUserId(creditId, userId);
@@ -25,7 +25,7 @@ export class PaymentController extends PaymentDAO {
 
         );
 
-        this.router.get("/:id", async (req, res) => {
+        this.router.get("/:id", async (req: Request, res: Response) => {
             const id = parseInt(req.params.id);
             const data = await PaymentDAO.getPaymentById(id);
             if (data[0] === ErrorControl.SUCCESS) {
@@ -36,7 +36,7 @@ export class PaymentController extends PaymentDAO {
             return res.status(data[2]).send(data[1]);
         });
 
-        this.router.post("/", async (req, res) => {
+        this.router.post("/", async (req: Request, res: Response) => {
             const data = await PaymentDAO.add(req.body);
             if (data[0] === ErrorControl.SUCCESS) {
                 return res
@@ -46,7 +46,7 @@ export class PaymentController extends PaymentDAO {
             return res.status(data[2]).send(data[1]);
         });
 
-        this.router.put("/:id", async (req, res) => {
+        this.router.put("/:id", async (req: Request, res: Response) => {
             const id = parseInt(req.params.id);
             const data = await PaymentDAO.update(req.body, id);
             if (data[0] === ErrorControl.SUCCESS) {
@@ -57,7 +57,7 @@ export class PaymentController extends PaymentDAO {
             return res.status(data[2]).send(data[1]);
         });
 
-        this.router.delete("/:id", async (req, res) => {
+        this.router.delete("/:id", async (req: Request, res: Response) => {
             const id = parseInt(req.params.id);
             const data = await PaymentDAO.delete(id);
             if (data[0] === ErrorControl.SUCCESS) {

@@ -41,7 +41,7 @@ export class UserController extends UserDAO {
 			}
 		);
 
-		// Get user
+		// Get user (self)
 		this.router.get(
 			"/",
 			verifyToken,
@@ -53,7 +53,14 @@ export class UserController extends UserDAO {
 			}
 		);
 
-		// Sign in
+		// Get user by id
+		this.router.get("/:id", async (req: Request, res: Response) => {
+			const id = req.params.id;
+			const data = await UserDAO.getUserById(id);
+			return res.status(data[2]).send(data[1]);
+		});
+
+		// Sign in / login
 		this.router.post("/signin", async (req: Request, res: Response) => {
 			const { email, password } = req.body;
 			const data = await UserDAO.signIn(email, password);

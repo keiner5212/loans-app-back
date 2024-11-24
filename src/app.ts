@@ -7,6 +7,7 @@ import { config } from "dotenv";
 import { CreditController } from "./controllers/CreditController";
 import { PaymentController } from "./controllers/PaymentController";
 import { FinancingController } from "./controllers/FinancingController";
+import { verifyAppTokenMiddleware } from "./middlewares/appToken";
 
 config()
 
@@ -36,6 +37,7 @@ export class App {
 		const format = "\n#:requests\tt::date\tm::method\trt::response-time ms\np::url\ts::status\tb::res[content-length]\n";
 		this.app.use(morgan(format));
 		this.app.use(compression());
+		this.app.use(verifyAppTokenMiddleware)
 	}
 
 	private generalRoutes() {
