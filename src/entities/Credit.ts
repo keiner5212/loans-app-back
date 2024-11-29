@@ -45,6 +45,10 @@ export class Credit extends Model {
     public period!: number;
     public status!: string;
     public applicationDate!: Date;
+    public aprovedDate!: Date;
+    public rejectedDate!: Date;
+    public releasedDate!: Date;
+    public finishedDate!: Date;
     public lastPaymentDate!: Date;
 
 }
@@ -100,6 +104,22 @@ export const creditDDL = {
     applicationDate: {
         type: DataTypes.DATE,
         allowNull: false,
+    },
+    aprovedDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    rejectedDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    releasedDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    finishedDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
     },
     lastPaymentDate: {
         type: DataTypes.DATE,

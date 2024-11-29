@@ -23,6 +23,21 @@ export class CreditDao {
         }
     }
 
+    protected static async getLateCredits(): Promise<DaoResponse> {
+        try {
+            const credits = await Credit.findAll({ where: { status: Status.LATE } });
+            return [ErrorControl.SUCCESS, credits, HttpStatusCode.Ok];
+        } catch (error) {
+            const msg = "Error in get late credits";
+            logError(msg + ": " + error);
+            return [
+                ErrorControl.ERROR,
+                msg,
+                HttpStatusCode.InternalServerError,
+            ];
+        }
+    }
+
     protected static async getCreditById(id: number): Promise<DaoResponse> {
         try {
             const credit = await Credit.findOne({ where: { id } });
