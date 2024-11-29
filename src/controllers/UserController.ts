@@ -35,7 +35,10 @@ export class UserController extends UserDAO {
 				if (data[0] === ErrorControl.SUCCESS) {
 					return res
 						.status(data[2])
-						.send("User created successfully: " + data[1]);
+						.json({
+							message: "User created successfully",
+							content: data[1]
+						});
 				}
 				return res.status(data[2]).send(data[1]);
 			}

@@ -1,15 +1,17 @@
 import cors from "cors";
 import express, { Application, Request, Response } from "express";
 import morgan from "morgan";
-import { UserController } from "./controllers/UserController";
 import compression from "compression";
 import { config } from "dotenv";
+import { UserController } from "./controllers/UserController";
 import { CreditController } from "./controllers/CreditController";
 import { PaymentController } from "./controllers/PaymentController";
 import { FinancingController } from "./controllers/FinancingController";
 import { verifyAppTokenMiddleware } from "./middlewares/appToken";
+import { ConfigController } from "./controllers/ConfigController";
+import { FilesController } from "./controllers/FilesController";
 
-config()
+config();
 
 export class App {
 	private app: Application;
@@ -26,19 +28,20 @@ export class App {
 	}
 
 	private midlewares() {
-		// MIDDLEWARE
+		// MIDDLEWARES
 		this.app.use(cors());
-		this.app.use(express.json({ limit: '50mb' }));
+		this.app.use(express.json({ limit: '10mb' }));
 		morgan.token("date", () => {
 			const date = new Date();
-			return `[${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}.${date.getUTCMilliseconds()}]`;
+			return `[${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}.${date.getUTCMilliseconds()}]`;
 		});
 		morgan.token("requests", () => `${++this.numRequest}`);
 		const format = "\n#:requests\tt::date\tm::method\trt::response-time ms\np::url\ts::status\tb::res[content-length]\n";
 		this.app.use(morgan(format));
 		this.app.use(compression());
-		this.app.use(verifyAppTokenMiddleware)
+		this.app.use(verifyAppTokenMiddleware);
 	}
+
 
 	private generalRoutes() {
 		// ROUTES
@@ -51,10 +54,12 @@ export class App {
 
 	private controllerRoutes() {
 		// Controllers ROUTES
-		this.app.use(this.prefix + "/user", new UserController().routes())
-		this.app.use(this.prefix + "/credit", new CreditController().routes())
-		this.app.use(this.prefix + "/payment", new PaymentController().routes())
-		this.app.use(this.prefix + "/financing", new FinancingController().routes())
+		this.app.use(this.prefix + "/config", new ConfigController().routes());
+		this.app.use(this.prefix + "/user", new UserController().routes());
+		this.app.use(this.prefix + "/credit", new CreditController().routes());
+		this.app.use(this.prefix + "/payment", new PaymentController().routes());
+		this.app.use(this.prefix + "/financing", new FinancingController().routes());
+		this.app.use(this.prefix + "/files", new FilesController().routes());
 	}
 
 	private NotFound() {

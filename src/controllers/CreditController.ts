@@ -45,7 +45,12 @@ export class CreditController extends CreditDao {
       if (data[0] === ErrorControl.SUCCESS) {
         return res
           .status(data[2])
-          .send("Credit created successfully: " + data[1]);
+          .json(
+            {
+              message: "Credit created successfully",
+              content: data[1]
+            }
+          );
       }
       return res.status(data[2]).send(data[1]);
     });

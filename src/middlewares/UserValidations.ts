@@ -12,6 +12,11 @@ export const CreateUserBodyValidations = (
 ) => {
 	const schema = Joi.object({
 		name: Joi.string().required().allow(""),
+		age: Joi.number().required(),
+		locationCroquis: Joi.string().required().allow(""),
+		documentImageFront: Joi.string().required().allow(""),
+		documentImageBack: Joi.string().required().allow(""),
+		proofOfIncome: Joi.string().required().allow(""),
 		email: Joi.string().required(),
 		document_type: Joi.string().required().allow(""),
 		document: Joi.string().required().allow(""),

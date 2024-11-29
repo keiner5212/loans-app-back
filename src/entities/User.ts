@@ -12,10 +12,16 @@ import { DataTypes, Model } from 'sequelize';
  * field - `role` is the role of the user,
  * field - `password` is the password of the user,
  * field - `created_at` is the date when the user was created,
+ * 
  */
 export class User extends Model {
 	public id?: number;
 	public name!: string;
+	public age?: number;
+	public locationCroquis!: string;
+	public documentImageFront!: string;
+	public documentImageBack!: string;
+	public proofOfIncome!: string;
 	public email!: string;
 	public document_type!: string;
 	public document!: string;
@@ -39,6 +45,26 @@ export const userDDL = {
 	name: {
 		type: DataTypes.STRING,
 		allowNull: false,
+	},
+	age: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+	},
+	locationCroquis: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	documentImageFront: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	documentImageBack: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
+	proofOfIncome: {
+		type: DataTypes.STRING,
+		allowNull: true,
 	},
 	email: {
 		type: DataTypes.STRING,

@@ -6,6 +6,8 @@ import { Credit, creditDDL } from "../entities/Credit";
 import { Financing, financingDDL } from "../entities/Financing";
 import { Payment, paymentDDL } from "../entities/Payment";
 import { seedUsers } from "./seed/UserSeed";
+import { AppConfig, configDDL } from "../entities/Config";
+import { seedConfig } from "./seed/ConfigSeed";
 
 
 const log = createDebugger('migrations');
@@ -80,7 +82,15 @@ export async function Migrations() {
         }
     )
 
+    AppConfig.init(configDDL, {
+        sequelize: db,
+        modelName: 'Config',
+        tableName: 'configs',
+        timestamps: false,
+    })
+
     await PostgresService.sync();
 
     await seedUsers();
+    await seedConfig();
 }

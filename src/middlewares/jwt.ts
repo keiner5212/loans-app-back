@@ -9,10 +9,7 @@ config();
 const log = createDebugger("jwt");
 const logError = log.extend("error");
 /**
- * Verify token
- * @param req
- * @param res
- * @param next
+ * Verify token check if the token is valid and set the user in the request
  */
 export const verifyToken = (
 	req: Request,
