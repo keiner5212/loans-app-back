@@ -2,9 +2,23 @@ import { DataTypes, Model } from "sequelize";
 import { User } from "./User";
 
 export enum Status {
-    APPROVED = "APPROVED",
-    REJECTED = "REJECTED",
+    //pendiente
     PENDING = "PENDING",
+    //aprobado
+    APPROVED = "APPROVED",
+    //rechazado
+    REJECTED = "REJECTED",
+    //desembolsado
+    RELEASED = "RELEASED",
+    //atrasado
+    LATE = "LATE",
+    //terminado
+    FINISHED = "FINISHED",
+}
+
+export enum CreditType {
+    CREDIT = "CREDIT",
+    FINANCING = "FINANCING",
 }
 
 /**
@@ -23,6 +37,7 @@ export enum Status {
 export class Credit extends Model {
     public id?: number;
     public userId!: number;
+    public creditType!: string;
     public userCreatorId!: number;
     public requestedAmount!: number;
     public interestRate!: number;
@@ -46,6 +61,11 @@ export const creditDDL = {
             model: User,
             key: 'id',
         },
+    },
+    creditType: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: CreditType.CREDIT,
     },
     userCreatorId: {
         type: DataTypes.INTEGER,

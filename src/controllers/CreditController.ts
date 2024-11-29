@@ -29,6 +29,20 @@ export class CreditController extends CreditDao {
       }
     );
 
+    //get all
+    this.router.get("/", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
+      const data = await CreditDao.getCredits();
+      if (data[0] === ErrorControl.SUCCESS) {
+        return res
+          .status(data[2])
+          .json({
+            message: "Credits found successfully",
+            data: data[1],
+          })
+      }
+      return res.status(data[2]).send(data[1]);
+    });
+
     this.router.get("/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const data = await CreditDao.getCreditById(id);
@@ -58,7 +72,7 @@ export class CreditController extends CreditDao {
     this.router.put(
       "/aprove/:id",
       verifyToken,
-      isUserRecovery,
+      isUserAdmin,
       async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
         const data = await CreditDao.approve(id);

@@ -8,6 +8,21 @@ const logError = log.extend("error");
 
 export class CreditDao {
 
+    protected static async getCredits(): Promise<DaoResponse> {
+        try {
+            const credits = await Credit.findAll();
+            return [ErrorControl.SUCCESS, credits, HttpStatusCode.Ok];
+        } catch (error) {
+            const msg = "Error in get credits";
+            logError(msg + ": " + error);
+            return [
+                ErrorControl.ERROR,
+                msg,
+                HttpStatusCode.InternalServerError,
+            ];
+        }
+    }
+
     protected static async getCreditById(id: number): Promise<DaoResponse> {
         try {
             const credit = await Credit.findOne({ where: { id } });
