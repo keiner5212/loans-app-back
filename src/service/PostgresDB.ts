@@ -25,7 +25,7 @@ export class PostgresService {
 			host: postgresConfig.host,
 			port: postgresConfig.port,
 			dialect: postgresConfig.dialect as any,
-			logging: (msg) => log(msg),
+			logging: () => {},
 		});
 
 		this.connect();
@@ -52,6 +52,7 @@ export class PostgresService {
 			const [results] = await this.sequelize.query(queryText, {
 				replacements: params,
 			});
+			log('Query executed:', queryText);
 			return results;
 		} catch (error) {
 			logError('Error executing query:', error);
