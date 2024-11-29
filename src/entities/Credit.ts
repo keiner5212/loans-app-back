@@ -45,6 +45,8 @@ export class Credit extends Model {
     public period!: number;
     public status!: string;
     public applicationDate!: Date;
+    public lastPaymentDate!: Date;
+
 }
 
 export const creditDDL = {
@@ -98,5 +100,9 @@ export const creditDDL = {
     applicationDate: {
         type: DataTypes.DATE,
         allowNull: false,
+    },
+    lastPaymentDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
     },
 };

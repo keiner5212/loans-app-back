@@ -10,6 +10,7 @@ import { FinancingController } from "./controllers/FinancingController";
 import { verifyAppTokenMiddleware } from "./middlewares/appToken";
 import { ConfigController } from "./controllers/ConfigController";
 import { FilesController } from "./controllers/FilesController";
+import { NotificationController } from "./controllers/NotificationController";
 
 config();
 
@@ -60,6 +61,7 @@ export class App {
 		this.app.use(this.prefix + "/payment", new PaymentController().routes());
 		this.app.use(this.prefix + "/financing", new FinancingController().routes());
 		this.app.use(this.prefix + "/files", new FilesController().routes());
+		this.app.use(this.prefix + "/notification", new NotificationController().routes());
 	}
 
 	private NotFound() {

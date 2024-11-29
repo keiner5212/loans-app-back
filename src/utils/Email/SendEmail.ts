@@ -35,7 +35,7 @@ export class MailService {
 		this.fromDefault = `${appName} <${process.env.EMAIL_USER}>`;
 
 		// Verify connection configuration
-		this.transporter.verify((error, success) => {
+		this.transporter.verify((error) => {
 			if (error) {
 				logError(error);
 			} else {

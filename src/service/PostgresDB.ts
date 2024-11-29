@@ -52,7 +52,6 @@ export class PostgresService {
 			const [results] = await this.sequelize.query(queryText, {
 				replacements: params,
 			});
-			log('Query executed:', queryText);
 			return results;
 		} catch (error) {
 			logError('Error executing query:', error);

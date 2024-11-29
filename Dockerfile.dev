@@ -1,5 +1,5 @@
 # Usa la imagen base de Node.js 20
-FROM node:20-alpine
+FROM node:20-slim
 
 # Crea un directorio de trabajo para la app
 WORKDIR /app
@@ -9,6 +9,15 @@ COPY package.json pnpm-lock.yaml ./
 
 # Instala pnpm globalmente
 RUN npm install -g pnpm
+
+# instala las depedencias de chrome para el servicio de whatsapp 
+RUN apt-get update && apt-get install -y \
+ffmpeg \ 
+nano \
+zip unzip \
+fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf \
+chromium \
+--no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 # Instala las dependencias basándote en los archivos de package.json y pnpm-lock.yaml
 RUN pnpm i --frozen-lockfile
