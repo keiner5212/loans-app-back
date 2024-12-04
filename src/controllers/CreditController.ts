@@ -13,6 +13,25 @@ export class CreditController extends CreditDao {
   }
 
   public routes(): Router {
+    //get Late Credits
+    this.router.get(
+      "/late",
+      verifyToken,
+      isUserRecovery,
+      async (req: Request, res: Response) => {
+        const data = await CreditDao.getCreditsLate();
+        if (data[0] === ErrorControl.SUCCESS) {
+          return res
+            .status(data[2])
+            .json({
+              message: "Late Credits found successfully",
+              data: data[1],
+            })
+        }
+        return res.status(data[2]).send(data[1]);
+      }
+    );
+
     this.router.get(
       "/users/:id",
       verifyToken,

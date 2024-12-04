@@ -10,6 +10,22 @@ const logError = log.extend("error");
 
 export class CreditDao {
 
+    //getCreditsLate
+    protected static async getCreditsLate(): Promise<DaoResponse> {
+        try {
+            const credits = await Credit.findAll({ where: { status: Status.LATE } });
+            return [ErrorControl.SUCCESS, credits, HttpStatusCode.Ok];
+        } catch (error) {
+            const msg = "Error in get credits late";
+            logError(msg + ": " + error);
+            return [
+                ErrorControl.ERROR,
+                msg,
+                HttpStatusCode.InternalServerError,
+            ];
+        }
+    }
+
     protected static async saveContract(id: number, contract: string): Promise<DaoResponse> {
         try {
             const credit = await Credit.findOne({ where: { id } });
