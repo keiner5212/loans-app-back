@@ -43,6 +43,21 @@ export class CreditController extends CreditDao {
       return res.status(data[2]).send(data[1]);
     });
 
+    // get credit contract info 
+    this.router.get("/contract/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
+      const id = parseInt(req.params.id);
+      const data = await CreditDao.getCreditContractInfo(id);
+      if (data[0] === ErrorControl.SUCCESS) {
+        return res
+          .status(data[2])
+          .send({
+            message: "Credit contract found successfully",
+            data: data[1],
+          });
+      }
+      return res.status(data[2]).json(data[1]);
+    });
+
     // get credit info
     this.router.get("/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
@@ -69,6 +84,21 @@ export class CreditController extends CreditDao {
               content: data[1]
             }
           );
+      }
+      return res.status(data[2]).send(data[1]);
+    });
+
+    // save signed contract
+    this.router.put("/contract/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
+      const id = parseInt(req.params.id);
+      const data = await CreditDao.saveContract(id, req.body.signedContract);
+      if (data[0] === ErrorControl.SUCCESS) {
+        return res
+          .status(data[2])
+          .json({
+            message: "Credit contract saved successfully",
+            content: data[1]
+          });
       }
       return res.status(data[2]).send(data[1]);
     });

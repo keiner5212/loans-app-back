@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, ModelAttributes } from "sequelize";
 import { Credit } from "./Credit";
 
 /**
@@ -21,7 +21,7 @@ export class Financing extends Model {
 }
 
 
-export const financingDDL = {
+export const financingDDL: ModelAttributes = {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -35,6 +35,7 @@ export const financingDDL = {
             model: Credit,
             key: 'id',
         },
+        onDelete: 'CASCADE',
     },
     vehiclePlate: {
         type: DataTypes.STRING,

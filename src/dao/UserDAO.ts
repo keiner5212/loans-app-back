@@ -12,6 +12,9 @@ import { Cache } from "../utils/cache";
 import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
 import { HttpStatusCode } from "axios";
 import { Roles } from "../constants/Roles";
+import path from "path";
+import { ExpressServerConfig } from "../constants/Config";
+import fs from "fs/promises";
 
 config();
 
@@ -22,6 +25,55 @@ const logError = log.extend("error");
 const mailService = MailService.getInstance();
 
 export class UserDAO {
+
+	//delete
+	public static async delete(id_user: string): Promise<DaoResponse> {
+		try {
+			// Find the user by ID using Sequelize
+			const user = await User.findOne({ where: { id: id_user } });
+			//if theres images, delete them
+			if (user) {
+				if (user.documentImageBack) {
+					const filePath = path.resolve(__dirname, "..", ExpressServerConfig.STORAGE_PATH, user.documentImageBack);
+					await fs.unlink(filePath);
+				}
+				if (user.documentImageFront) {
+					const filePath = path.resolve(__dirname, "..", ExpressServerConfig.STORAGE_PATH, user.documentImageFront);
+					await fs.unlink(filePath);
+				}
+				if (user.proofOfIncome) {
+					const filePath = path.resolve(__dirname, "..", ExpressServerConfig.STORAGE_PATH, user.proofOfIncome);
+					await fs.unlink(filePath);
+				}
+				if (user.locationCroquis) {
+					const filePath = path.resolve(__dirname, "..", ExpressServerConfig.STORAGE_PATH, user.locationCroquis);
+					await fs.unlink(filePath);
+				}
+			}
+			await User.destroy({ where: { id: id_user } });
+			return [ErrorControl.SUCCESS, "User deleted", HttpStatusCode.NoContent];
+		} catch (error) {
+			const msg = "Error in delete user";
+			logError(msg + ": " + error);
+			return [ErrorControl.ERROR, msg, HttpStatusCode.InternalServerError];
+		}
+	}
+
+	//getAllUsers
+	public static async getAllUsers(): Promise<DaoResponse> {
+		try {
+			const users = (await User.findAll()).map((user) => {
+				user.deletePrivateData();
+				return user;
+			});
+			return [ErrorControl.SUCCESS, users, HttpStatusCode.Ok];
+		} catch (error) {
+			const msg = "Error in get all users";
+			logError(msg + ": " + error);
+			return [ErrorControl.ERROR, msg, HttpStatusCode.InternalServerError];
+		}
+	}
+
 	protected static async signIn(
 		email: string,
 		password: string

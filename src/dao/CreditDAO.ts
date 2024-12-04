@@ -3,11 +3,39 @@ import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
 import { Credit, CreditType, Status } from "../entities/Credit";
 import { createDebugger } from "../utils/debugConfig";
 import { Financing } from "../entities/Financing";
+import { User } from "../entities/User";
 
 const log = createDebugger("CreditDAO");
 const logError = log.extend("error");
 
 export class CreditDao {
+
+    protected static async saveContract(id: number, contract: string): Promise<DaoResponse> {
+        try {
+            const credit = await Credit.findOne({ where: { id } });
+            if (!credit) {
+                return [
+                    ErrorControl.PERSONALIZED,
+                    "Credit not found",
+                    HttpStatusCode.NotFound,
+                ];
+            }
+
+            credit.signedContract = contract;
+            credit.status = Status.RELEASED;
+            credit.releasedDate = new Date();
+            await credit.save();
+            return [ErrorControl.SUCCESS, credit, HttpStatusCode.Ok];
+        } catch (error) {
+            const msg = "Error in save contract";
+            logError(msg + ": " + error);
+            return [
+                ErrorControl.ERROR,
+                msg,
+                HttpStatusCode.InternalServerError,
+            ];
+        }
+    }
 
     protected static async getCredits(): Promise<DaoResponse> {
         try {
@@ -39,6 +67,64 @@ export class CreditDao {
         }
     }
 
+
+    protected static async getCreditContractInfo(id: number): Promise<DaoResponse> {
+        try {
+            const credit = await Credit.findOne({ where: { id } });
+            if (!credit) {
+                return [
+                    ErrorControl.PERSONALIZED,
+                    "Credit not found",
+                    HttpStatusCode.NotFound,
+                ];
+            }
+
+            //get user info
+            const user = await User.findOne({ where: { id: credit.userId } });
+            if (!user) {
+                return [
+                    ErrorControl.PERSONALIZED,
+                    "User of credit not found",
+                    HttpStatusCode.NotFound,
+                ];
+            }
+
+            user.deletePrivateData();
+
+            //if credit is of type financing, get financing info
+            if (credit.creditType == CreditType.FINANCING) {
+                const financing = await Financing.findOne({ where: { creditId: credit.id } });
+                if (!financing) {
+                    return [
+                        ErrorControl.PERSONALIZED,
+                        "Financing of credit not found",
+                        HttpStatusCode.NotFound,
+                    ];
+                }
+
+                return [ErrorControl.SUCCESS, {
+                    credit,
+                    user,
+                    financing
+                }, HttpStatusCode.Ok];
+            } else {
+
+                return [ErrorControl.SUCCESS, {
+                    user,
+                    credit
+                }, HttpStatusCode.Ok];
+            }
+
+        } catch (error) {
+            const msg = "Error in get credit by id";
+            logError(msg + ": " + error);
+            return [
+                ErrorControl.ERROR,
+                msg,
+                HttpStatusCode.InternalServerError,
+            ];
+        }
+    }
     protected static async getCreditById(id: number): Promise<DaoResponse> {
         try {
             const credit = await Credit.findOne({ where: { id } });

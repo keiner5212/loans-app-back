@@ -5,6 +5,7 @@ import { ErrorControl } from "../constants/ErrorControl";
 import { verifyToken } from "../middlewares/jwt";
 import { CheckCache } from "../middlewares/Cache";
 import { HttpStatusCode } from "axios";
+import { isUserAdmin } from "../middlewares/Roles";
 
 export class UserController extends UserDAO {
 	private router: Router;
@@ -40,6 +41,17 @@ export class UserController extends UserDAO {
 							content: data[1]
 						});
 				}
+				return res.status(data[2]).send(data[1]);
+			}
+		);
+
+		//get all users
+		this.router.get(
+			"/all",
+			verifyToken,
+			CheckCache,
+			async (req: Request, res: Response) => {
+				const data = await UserDAO.getAllUsers();
 				return res.status(data[2]).send(data[1]);
 			}
 		);
@@ -107,6 +119,21 @@ export class UserController extends UserDAO {
 			async (req: Request, res: Response) => {
 				const userId = req.body.user.id;
 				const data = await UserDAO.update(req.body, userId);
+				if (data[0] === ErrorControl.SUCCESS) {
+					return res.status(data[2]).send(data[1]);
+				}
+				return res.status(data[2]).send(data[1]);
+			}
+		);
+
+		//delete user
+		this.router.delete(
+			"/:id",
+			verifyToken,
+			isUserAdmin,
+			async (req: Request, res: Response) => {
+				const id = req.params.id;
+				const data = await UserDAO.delete(id);
 				if (data[0] === ErrorControl.SUCCESS) {
 					return res.status(data[2]).send(data[1]);
 				}

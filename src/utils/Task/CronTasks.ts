@@ -31,11 +31,11 @@ export async function updateCreditStatus() {
     const today = new Date();
 
     for (const credit of credits) {
-        // if credit is not released or late, skip
-        if (credit.status !== Status.RELEASED && credit.status !== Status.LATE) {
+        // if credit is not released, skip
+        if (credit.status !== Status.RELEASED) {
             continue;
         }
-        const lastPaymentDate = credit.lastPaymentDate ? new Date(credit.lastPaymentDate) : new Date(credit.aprovedDate);
+        const lastPaymentDate = credit.lastPaymentDate ? new Date(credit.lastPaymentDate) : new Date(credit.releasedDate);
         const diffTime = calculateTimeDiff(lastPaymentDate, today, credit.period);
 
         // Check if the credit is overdue

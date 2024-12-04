@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize"
+import { DataTypes, Model, ModelAttributes } from "sequelize"
 import { Credit } from "./Credit"
 import { User } from "./User"
 
@@ -26,7 +26,7 @@ export class Payment extends Model {
 }
 
 
-export const paymentDDL = {
+export const paymentDDL: ModelAttributes = {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -48,6 +48,7 @@ export const paymentDDL = {
             model: User,
             key: 'id',
         },
+        onDelete: 'CASCADE',
     },
     userCreatorId: {
         type: DataTypes.INTEGER,
@@ -56,6 +57,7 @@ export const paymentDDL = {
             model: User,
             key: 'id',
         },
+        onDelete: 'CASCADE',
     },
     amount: {
         type: DataTypes.DECIMAL(10, 2),

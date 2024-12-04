@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, ModelAttributes } from "sequelize";
 import { User } from "./User";
 
 export enum Status {
@@ -53,7 +53,7 @@ export class Credit extends Model {
     public signedContract!: string;
 }
 
-export const creditDDL = {
+export const creditDDL: ModelAttributes = {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -67,6 +67,7 @@ export const creditDDL = {
             model: User,
             key: 'id',
         },
+        onDelete: 'CASCADE',
     },
     creditType: {
         type: DataTypes.STRING,
@@ -80,6 +81,7 @@ export const creditDDL = {
             model: User,
             key: 'id',
         },
+        onDelete: 'CASCADE',
     },
     requestedAmount: {
         type: DataTypes.DOUBLE,
