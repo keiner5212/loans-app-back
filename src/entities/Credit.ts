@@ -50,7 +50,7 @@ export class Credit extends Model {
     public releasedDate!: Date;
     public finishedDate!: Date;
     public lastPaymentDate!: Date;
-
+    public signedContract!: string;
 }
 
 export const creditDDL = {
@@ -123,6 +123,10 @@ export const creditDDL = {
     },
     lastPaymentDate: {
         type: DataTypes.DATE,
+        allowNull: true,
+    },
+    signedContract: {
+        type: DataTypes.STRING,
         allowNull: true,
     },
 };

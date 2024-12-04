@@ -1,7 +1,8 @@
 import { HttpStatusCode } from "axios";
 import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
-import { Credit, Status } from "../entities/Credit";
+import { Credit, CreditType, Status } from "../entities/Credit";
 import { createDebugger } from "../utils/debugConfig";
+import { Financing } from "../entities/Financing";
 
 const log = createDebugger("CreditDAO");
 const logError = log.extend("error");
@@ -49,7 +50,28 @@ export class CreditDao {
                 ];
             }
 
-            return [ErrorControl.SUCCESS, credit, HttpStatusCode.Ok];
+            //if credit is of type financing, get financing info
+            if (credit.creditType == CreditType.FINANCING) {
+                const financing = await Financing.findOne({ where: { creditId: credit.id } });
+                if (!financing) {
+                    return [
+                        ErrorControl.PERSONALIZED,
+                        "Financing of credit not found",
+                        HttpStatusCode.NotFound,
+                    ];
+                }
+
+                return [ErrorControl.SUCCESS, {
+                    credit,
+                    financing
+                }, HttpStatusCode.Ok];
+            } else {
+
+                return [ErrorControl.SUCCESS, {
+                    credit
+                }, HttpStatusCode.Ok];
+            }
+
         } catch (error) {
             const msg = "Error in get credit by id";
             logError(msg + ": " + error);
@@ -133,6 +155,7 @@ export class CreditDao {
                 ];
             }
             credit.status = Status.APPROVED;
+            credit.aprovedDate = new Date();
             await credit.save();
             return [ErrorControl.SUCCESS, credit, HttpStatusCode.Ok];
         } catch (error) {
@@ -157,6 +180,7 @@ export class CreditDao {
                 ];
             }
             credit.status = Status.REJECTED;
+            credit.rejectedDate = new Date();
             await credit.save();
             return [ErrorControl.SUCCESS, credit, HttpStatusCode.Ok];
         } catch (error) {

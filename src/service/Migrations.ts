@@ -91,6 +91,7 @@ export async function Migrations() {
 
     await PostgresService.sync();
 
+    log('Seeding database...');
     await seedUsers();
     await seedConfig();
 }

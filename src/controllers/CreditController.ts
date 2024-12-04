@@ -43,15 +43,19 @@ export class CreditController extends CreditDao {
       return res.status(data[2]).send(data[1]);
     });
 
+    // get credit info
     this.router.get("/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);
       const data = await CreditDao.getCreditById(id);
       if (data[0] === ErrorControl.SUCCESS) {
         return res
           .status(data[2])
-          .send("Credit found successfully: " + data[1]);
+          .send({
+            message: "Credit found successfully",
+            data: data[1],
+          });
       }
-      return res.status(data[2]).send(data[1]);
+      return res.status(data[2]).json(data[1]);
     });
 
     this.router.post("/", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
