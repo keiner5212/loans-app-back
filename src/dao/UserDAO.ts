@@ -128,15 +128,25 @@ export class UserDAO {
 	}
 	protected static async add(user: Omit<User, "id">): Promise<DaoResponse> {
 		try {
-			// Verify if email already exists
-			const existingUser = await User.findOne({ where: { email: user.email } });
-			if (existingUser) {
-				return [
-					ErrorControl.PERSONALIZED,
-					"Email already exists",
-					HttpStatusCode.Conflict,
-				];
-			}
+			// uncoment to avoid duplicates
+			// // Verify if email already exists
+			// const existingUser = await User.findOne({ where: { email: user.email } });
+			// if (existingUser) {
+			// 	return [
+			// 		ErrorControl.PERSONALIZED,
+			// 		"Email already exists",
+			// 		HttpStatusCode.Conflict,
+			// 	];
+			// }
+			// // verify if document exists
+			// const existingDocument = await User.findOne({ where: { document: user.document } });
+			// if (existingDocument) {
+			// 	return [
+			// 		ErrorControl.PERSONALIZED,
+			// 		"Document already exists",
+			// 		HttpStatusCode.Conflict,
+			// 	];
+			// }
 
 			// Encrypt password
 			user.password = await EncriptPassword(user.password);
