@@ -77,14 +77,14 @@ export class PaymentDAO {
         }
     }
 
-    //get payments by user id and credit id
+    //get payments by and credit id
 
-    protected static async getPaymentByCreditIdAndUserId(creditId: number, userId: number): Promise<DaoResponse> {
+    protected static async getPaymentByCreditId(creditId: number): Promise<DaoResponse> {
         try {
-            const payments = await Payment.findAll({ where: { creditId, userId } });
+            const payments = await Payment.findAll({ where: { creditId } });
             return [ErrorControl.SUCCESS, payments, HttpStatusCode.Ok];
         } catch (error) {
-            const msg = "Error in get payment by credit id and user id.";
+            const msg = "Error in get payment by credit id.";
             logError(msg + ": " + error);
             return [
                 ErrorControl.ERROR,

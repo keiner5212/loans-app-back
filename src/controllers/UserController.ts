@@ -6,6 +6,7 @@ import { verifyToken } from "../middlewares/jwt";
 import { CheckCache } from "../middlewares/Cache";
 import { HttpStatusCode } from "axios";
 import { isUserAdmin } from "../middlewares/Roles";
+import { Cache } from "../utils/cache";
 
 export class UserController extends UserDAO {
 	private router: Router;
@@ -52,6 +53,9 @@ export class UserController extends UserDAO {
 			CheckCache,
 			async (req: Request, res: Response) => {
 				const data = await UserDAO.getAllUsers();
+				if (data[0] === ErrorControl.SUCCESS) {
+					Cache.set(req.body.cacheKey, data[1], 60);
+				}
 				return res.status(data[2]).send(data[1]);
 			}
 		);
@@ -64,16 +68,43 @@ export class UserController extends UserDAO {
 			async (req: Request, res: Response) => {
 				const userId = req.body.user.id;
 				const data = await UserDAO.getUserById(userId);
+				if (data[0] === ErrorControl.SUCCESS) {
+					Cache.set(req.body.cacheKey, data[1], 60);
+				}
 				return res.status(data[2]).send(data[1]);
 			}
 		);
 
+		//search user (document or email)
+		this.router.get(
+			"/search",
+			verifyToken,
+			CheckCache,
+			async (req: Request, res: Response) => {
+				const query = req.query.search as string;
+				const data = await UserDAO.searchUser(query);
+				if (data[0] === ErrorControl.SUCCESS) {
+					Cache.set(req.body.cacheKey, {
+						user: data[1],
+					}, 60);
+				}
+				return res.status(data[2]).json({
+					user: data[1],
+				});
+			}
+		);
+
 		// Get user by id
-		this.router.get("/:id", async (req: Request, res: Response) => {
-			const id = req.params.id;
-			const data = await UserDAO.getUserById(id);
-			return res.status(data[2]).send(data[1]);
-		});
+		this.router.get("/:id",
+			verifyToken,
+			CheckCache, async (req: Request, res: Response) => {
+				const id = req.params.id;
+				const data = await UserDAO.getUserById(id);
+				if (data[0] === ErrorControl.SUCCESS) {
+					Cache.set(req.body.cacheKey, data[1], 60);
+				}
+				return res.status(data[2]).send(data[1]);
+			});
 
 		// Sign in / login
 		this.router.post("/signin", async (req: Request, res: Response) => {

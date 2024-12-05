@@ -1,6 +1,8 @@
 import { Request, Response, Router } from "express";
 import { PaymentDAO } from "../dao/PaymentDAO";
 import { ErrorControl } from "../constants/ErrorControl";
+import { CheckCache } from "../middlewares/Cache";
+import { Cache } from "../utils/cache";
 
 export class PaymentController extends PaymentDAO {
     private router: Router
@@ -11,30 +13,45 @@ export class PaymentController extends PaymentDAO {
 
     public routes(): Router {
 
-        this.router.get("/user/:userId/credit/:creditId", async (req: Request, res: Response) => {
-            const userId = parseInt(req.params.userId);
-            const creditId = parseInt(req.params.creditId);
-            const data = await PaymentDAO.getPaymentByCreditIdAndUserId(creditId, userId);
-            if (data[0] === ErrorControl.SUCCESS) {
-                return res
-                    .status(data[2])
-                    .send("Payments found successfully: " + data[1]);
+        this.router.get("/credit/:creditId",
+            CheckCache, async (req: Request, res: Response) => {
+                const creditId = parseInt(req.params.creditId);
+                const data = await PaymentDAO.getPaymentByCreditId(creditId);
+                if (data[0] === ErrorControl.SUCCESS) {
+                    Cache.set(req.body.cacheKey, {
+                        message: "Payments found successfully",
+                        data: data[1],
+                    }, 60);
+                    return res
+                        .status(data[2])
+                        .json({
+                            message: "Payments found successfully",
+                            data: data[1],
+                        })
+                }
+                return res.status(data[2]).send(data[1]);
             }
-            return res.status(data[2]).send(data[1]);
-        }
 
         );
 
-        this.router.get("/:id", async (req: Request, res: Response) => {
-            const id = parseInt(req.params.id);
-            const data = await PaymentDAO.getPaymentById(id);
-            if (data[0] === ErrorControl.SUCCESS) {
-                return res
-                    .status(data[2])
-                    .send("Payments found successfully: " + data[1]);
-            }
-            return res.status(data[2]).send(data[1]);
-        });
+        this.router.get("/:id",
+            CheckCache, async (req: Request, res: Response) => {
+                const id = parseInt(req.params.id);
+                const data = await PaymentDAO.getPaymentById(id);
+                if (data[0] === ErrorControl.SUCCESS) {
+                    Cache.set(req.body.cacheKey, {
+                        message: "Payments found successfully",
+                        data: data[1],
+                    }, 60);
+                    return res
+                        .status(data[2])
+                        .json({
+                            message: "Payments found successfully",
+                            data: data[1],
+                        })
+                }
+                return res.status(data[2]).send(data[1]);
+            });
 
         this.router.post("/", async (req: Request, res: Response) => {
             const data = await PaymentDAO.add(req.body);

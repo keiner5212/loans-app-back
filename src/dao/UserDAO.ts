@@ -15,6 +15,7 @@ import { Roles } from "../constants/Roles";
 import path from "path";
 import { ExpressServerConfig } from "../constants/Config";
 import fs from "fs/promises";
+import { Op } from "sequelize";
 
 config();
 
@@ -26,8 +27,25 @@ const mailService = MailService.getInstance();
 
 export class UserDAO {
 
+	//searchUser
+	protected static async searchUser(search: string): Promise<DaoResponse> {
+		try {
+			const user = await User.findOne({
+				where: {
+					[Op.or]: [{ email: search }, { document: search }]
+				}
+			});
+			user?.deletePrivateData();
+			return [ErrorControl.SUCCESS, user, HttpStatusCode.Ok];
+		} catch (error) {
+			const msg = "Error in search user";
+			logError(msg + ": " + error);
+			return [ErrorControl.ERROR, msg, HttpStatusCode.InternalServerError];
+		}
+	}
+
 	//delete
-	public static async delete(id_user: string): Promise<DaoResponse> {
+	protected static async delete(id_user: string): Promise<DaoResponse> {
 		try {
 			// Find the user by ID using Sequelize
 			const user = await User.findOne({ where: { id: id_user } });
@@ -60,7 +78,7 @@ export class UserDAO {
 	}
 
 	//getAllUsers
-	public static async getAllUsers(): Promise<DaoResponse> {
+	protected static async getAllUsers(): Promise<DaoResponse> {
 		try {
 			const users = (await User.findAll()).map((user) => {
 				user.deletePrivateData();
@@ -128,25 +146,24 @@ export class UserDAO {
 	}
 	protected static async add(user: Omit<User, "id">): Promise<DaoResponse> {
 		try {
-			// uncoment to avoid duplicates
-			// // Verify if email already exists
-			// const existingUser = await User.findOne({ where: { email: user.email } });
-			// if (existingUser) {
-			// 	return [
-			// 		ErrorControl.PERSONALIZED,
-			// 		"Email already exists",
-			// 		HttpStatusCode.Conflict,
-			// 	];
-			// }
-			// // verify if document exists
-			// const existingDocument = await User.findOne({ where: { document: user.document } });
-			// if (existingDocument) {
-			// 	return [
-			// 		ErrorControl.PERSONALIZED,
-			// 		"Document already exists",
-			// 		HttpStatusCode.Conflict,
-			// 	];
-			// }
+			// Verify if email already exists
+			const existingUser = await User.findOne({ where: { email: user.email } });
+			if (existingUser) {
+				return [
+					ErrorControl.PERSONALIZED,
+					"Email already exists",
+					HttpStatusCode.Conflict,
+				];
+			}
+			// verify if document exists
+			const existingDocument = await User.findOne({ where: { document: user.document } });
+			if (existingDocument) {
+				return [
+					ErrorControl.PERSONALIZED,
+					"Document already exists",
+					HttpStatusCode.Conflict,
+				];
+			}
 
 			// Encrypt password
 			user.password = await EncriptPassword(user.password);
