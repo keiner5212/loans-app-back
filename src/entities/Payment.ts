@@ -18,7 +18,6 @@ import { User } from "./User"
 export class Payment extends Model {
     public id!: number
     public creditId!: number
-    public userId!: number
     public userCreatorId!: number
     public amount!: number
     public period!: number
@@ -40,15 +39,6 @@ export const paymentDDL: ModelAttributes = {
             model: Credit,
             key: 'id',
         },
-    },
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: User,
-            key: 'id',
-        },
-        onDelete: 'CASCADE',
     },
     userCreatorId: {
         type: DataTypes.INTEGER,

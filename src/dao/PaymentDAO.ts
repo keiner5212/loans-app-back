@@ -2,6 +2,7 @@ import { HttpStatusCode } from "axios";
 import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
 import { createDebugger } from "../utils/debugConfig";
 import { Payment } from "../entities/Payment";
+import { Credit } from "../entities/Credit";
 
 
 const log = createDebugger("FinancingDAO");
@@ -12,6 +13,17 @@ export class PaymentDAO {
 
     protected static async add(payment: Omit<Payment, "id">): Promise<DaoResponse> {
         try {
+            const credit = await Credit.findOne({ where: { id: payment.creditId } });
+            if (!credit) {
+                return [
+                    ErrorControl.PERSONALIZED,
+                    "Credit not found",
+                    HttpStatusCode.NotFound,
+                ];
+            }
+            credit.lastPaymentDate = new Date(payment.date);
+            credit.lastPaymentPeriod = payment.period;
+            await credit.save();
             const newPayment = await Payment.create(payment);
             return [ErrorControl.SUCCESS, newPayment.id, HttpStatusCode.Created];
         } catch (error) {

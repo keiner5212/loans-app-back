@@ -50,6 +50,7 @@ export class Credit extends Model {
     public releasedDate!: Date;
     public finishedDate!: Date;
     public lastPaymentDate!: Date;
+    public lastPaymentPeriod!: number;
     public signedContract!: string;
 }
 
@@ -125,6 +126,10 @@ export const creditDDL: ModelAttributes = {
     },
     lastPaymentDate: {
         type: DataTypes.DATE,
+        allowNull: true,
+    },
+    lastPaymentPeriod: {
+        type: DataTypes.INTEGER,
         allowNull: true,
     },
     signedContract: {
