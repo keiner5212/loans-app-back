@@ -1,6 +1,6 @@
-import { Config } from "../../constants/Config";
-import { AppConfig } from "../../entities/Config";
-import { createDebugger } from "../../utils/debugConfig";
+import { Config } from "@/constants/Config";
+import { AppConfig } from "@/entities/Config";
+import { createDebugger } from "@/utils/debugConfig";
 
 const log = createDebugger("ConfigSeed");
 const logError = log.extend("error");

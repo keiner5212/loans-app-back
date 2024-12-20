@@ -1,12 +1,12 @@
 import { Sequelize } from "sequelize";
-import { createDebugger } from "../utils/debugConfig";
+import { createDebugger } from "@/utils/debugConfig";
 import { PostgresService } from "./PostgresDB";
-import { User, userDDL } from "../entities/User";
-import { Credit, creditDDL } from "../entities/Credit";
-import { Financing, financingDDL } from "../entities/Financing";
-import { Payment, paymentDDL } from "../entities/Payment";
+import { User, userDDL } from "@/entities/User";
+import { Credit, creditDDL } from "@/entities/Credit";
+import { Financing, financingDDL } from "@/entities/Financing";
+import { Payment, paymentDDL } from "@/entities/Payment";
 import { seedUsers } from "./seed/UserSeed";
-import { AppConfig, configDDL } from "../entities/Config";
+import { AppConfig, configDDL } from "@/entities/Config";
 import { seedConfig } from "./seed/ConfigSeed";
 
 

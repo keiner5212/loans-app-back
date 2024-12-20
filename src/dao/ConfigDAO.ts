@@ -1,9 +1,9 @@
 
 
 import { HttpStatusCode } from "axios";
-import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
-import { createDebugger } from "../utils/debugConfig";
-import { AppConfig } from "../entities/Config";
+import { DaoResponse, ErrorControl } from "@/constants/ErrorControl";
+import { createDebugger } from "@/utils/debugConfig";
+import { AppConfig } from "@/entities/Config";
 
 const log = createDebugger("ConfigDao");
 const logError = log.extend("error");

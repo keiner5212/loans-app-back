@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Cache } from "../utils/cache";
-import { createDebugger } from "../utils/debugConfig";
+import { Cache } from "@/utils/cache";
+import { createDebugger } from "@/utils/debugConfig";
 import { HttpStatusCode } from "axios";
 
 const middlewareDebugger = createDebugger("cache");

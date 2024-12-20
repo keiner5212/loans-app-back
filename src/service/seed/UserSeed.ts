@@ -1,7 +1,7 @@
-import { Roles } from "../../constants/Roles";
-import { User } from "../../entities/User";
-import { EncriptPassword } from "../../utils/cryptography/encrypt";
-import { createDebugger } from "../../utils/debugConfig";
+import { Roles } from "@/constants/Roles";
+import { User } from "@/entities/User";
+import { EncriptPassword } from "@/utils/cryptography/encrypt";
+import { createDebugger } from "@/utils/debugConfig";
 
 const log = createDebugger("UserSeed");
 const logError = log.extend("error");

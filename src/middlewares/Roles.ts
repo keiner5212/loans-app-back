@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { createDebugger } from "../utils/debugConfig";
+import { createDebugger } from "@/utils/debugConfig";
 import { HttpStatusCode } from "axios";
-import { Roles } from "../constants/Roles";
+import { Roles } from "@/constants/Roles";
 
 
 const log = createDebugger("RolesMiddleware");

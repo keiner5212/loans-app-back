@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { createDebugger } from '../utils/debugConfig';
+import { createDebugger } from '@/utils/debugConfig';
 import { config } from 'dotenv';
 
 config();

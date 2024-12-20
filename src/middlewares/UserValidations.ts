@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Joi from "joi";
-import { createDebugger } from "../utils/debugConfig";
+import { createDebugger } from "@/utils/debugConfig";
 import { HttpStatusCode } from "axios";
 
 const middlewareDebugger = createDebugger("UserValidations");

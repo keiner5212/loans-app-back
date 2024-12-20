@@ -1,6 +1,6 @@
 import nodemailer, { Transporter } from "nodemailer";
 import { config } from "dotenv";
-import { createDebugger } from "../debugConfig";
+import { createDebugger } from "@/utils/debugConfig";
 
 config();
 const log = createDebugger("mailer");

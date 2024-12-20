@@ -1,10 +1,10 @@
 import { config } from "dotenv";
-import { createDebugger } from "./utils/debugConfig";
-import { App } from "./app";
-import { getLocalIP } from "./utils/net/LocalIp";
-import { createDatabase, Migrations } from "./service/Migrations";
-import { CronService } from "./utils/Task/CronService";
-import { NotificationServiceScheduler } from "./utils/Task/NotificationServiceScheduler";
+import { createDebugger } from "@/utils/debugConfig";
+import { App } from "@/app";
+import { getLocalIP } from "@/utils/net/LocalIp";
+import { createDatabase, Migrations } from "@/service/Migrations";
+import { CronService } from "@/utils/Task/CronService";
+import { NotificationServiceScheduler } from "@/utils/Task/NotificationServiceScheduler";
 
 // CONFIGURATION
 config();

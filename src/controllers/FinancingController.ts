@@ -1,8 +1,8 @@
 import { Request, Response, Router } from "express";
-import { FinancingDAO } from "../dao/FinancingDAO";
-import { ErrorControl } from "../constants/ErrorControl";
-import { CheckCache } from "../middlewares/Cache";
-import { Cache } from "../utils/cache";
+import { FinancingDAO } from "@/dao/FinancingDAO";
+import { ErrorControl } from "@/constants/ErrorControl";
+import { CheckCache } from "@/middlewares/Cache";
+import { Cache } from "@/utils/cache";
 
 export class FinancingController extends FinancingDAO {
   private router: Router;

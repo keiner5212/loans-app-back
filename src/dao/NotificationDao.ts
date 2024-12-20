@@ -1,9 +1,9 @@
 
-import { ErrorControl } from "../constants/ErrorControl";
-import { DaoResponse } from "../constants/ErrorControl";
-import { createDebugger } from "../utils/debugConfig";
-import { MailService } from "../utils/Email/SendEmail";
-import { WhatsAppService } from "../utils/Whatsapp/WhatsAppService";
+import { ErrorControl } from "@/constants/ErrorControl";
+import { DaoResponse } from "@/constants/ErrorControl";
+import { createDebugger } from "@/utils/debugConfig";
+import { MailService } from "@/utils/Email/SendEmail";
+import { WhatsAppService } from "@/utils/Whatsapp/WhatsAppService";
 
 const log = createDebugger("NotificationDao");
 const logError = log.extend("error");

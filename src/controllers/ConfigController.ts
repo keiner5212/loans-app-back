@@ -1,8 +1,8 @@
 import { Request, Response, Router } from "express";
-import { verifyToken } from "../middlewares/jwt";
-import { isUserMaster } from "../middlewares/Roles";
-import { ErrorControl } from "../constants/ErrorControl";
-import { ConfigDao } from "../dao/ConfigDAO";
+import { verifyToken } from "@/middlewares/jwt";
+import { isUserMaster } from "@/middlewares/Roles";
+import { ErrorControl } from "@/constants/ErrorControl";
+import { ConfigDao } from "@/dao/ConfigDAO";
 
 export class ConfigController extends ConfigDao {
     private router: Router;

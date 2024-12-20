@@ -1,8 +1,8 @@
 import { HttpStatusCode } from "axios";
-import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
-import { createDebugger } from "../utils/debugConfig";
-import { Payment } from "../entities/Payment";
-import { Credit } from "../entities/Credit";
+import { DaoResponse, ErrorControl } from "@/constants/ErrorControl";
+import { createDebugger } from "@/utils/debugConfig";
+import { Payment } from "@/entities/Payment";
+import { Credit } from "@/entities/Credit";
 
 
 const log = createDebugger("FinancingDAO");

@@ -1,7 +1,7 @@
-import { Credit, Status } from "../../entities/Credit";
-import { User } from "../../entities/User";
-import { MailService } from "../Email/SendEmail";
-import { WhatsAppService } from "../Whatsapp/WhatsAppService";
+import { Credit, Status } from "@/entities/Credit";
+import { User } from "@/entities/User";
+import { MailService } from "@/utils/Email/SendEmail";
+import { WhatsAppService } from "@/utils/Whatsapp/WhatsAppService";
 
 const mailService = MailService.getInstance();
 const whatsAppService = WhatsAppService.getInstance();

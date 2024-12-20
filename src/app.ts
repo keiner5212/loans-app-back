@@ -3,14 +3,14 @@ import express, { Application, Request, Response } from "express";
 import morgan from "morgan";
 import compression from "compression";
 import { config } from "dotenv";
-import { UserController } from "./controllers/UserController";
-import { CreditController } from "./controllers/CreditController";
-import { PaymentController } from "./controllers/PaymentController";
-import { FinancingController } from "./controllers/FinancingController";
-import { verifyAppTokenMiddleware } from "./middlewares/appToken";
-import { ConfigController } from "./controllers/ConfigController";
-import { FilesController } from "./controllers/FilesController";
-import { NotificationController } from "./controllers/NotificationController";
+import { UserController } from "@/controllers/UserController";
+import { CreditController } from "@/controllers/CreditController";
+import { PaymentController } from "@/controllers/PaymentController";
+import { FinancingController } from "@/controllers/FinancingController";
+import { verifyAppTokenMiddleware } from "@/middlewares/appToken";
+import { ConfigController } from "@/controllers/ConfigController";
+import { FilesController } from "@/controllers/FilesController";
+import { NotificationController } from "@/controllers/NotificationController";
 
 config();
 

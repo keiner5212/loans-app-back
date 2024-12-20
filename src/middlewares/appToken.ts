@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { config } from "dotenv";
 import { HttpStatusCode } from "axios";
-import { createDebugger } from "../utils/debugConfig";
-import { verifyAppToken } from "../utils/security/appToken";
+import { createDebugger } from "@/utils/debugConfig";
+import { verifyAppToken } from "@/utils/security/appToken";
 
 config();
 

@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
-import { verifyToken } from "../middlewares/jwt";
-import { isUserAdmin } from "../middlewares/Roles";
-import { NotificationDao } from "../dao/NotificationDao";
-import { ErrorControl } from "../constants/ErrorControl";
+import { verifyToken } from "@/middlewares/jwt";
+import { isUserAdmin } from "@/middlewares/Roles";
+import { NotificationDao } from "@/dao/NotificationDao";
+import { ErrorControl } from "@/constants/ErrorControl";
 
 export class NotificationController extends NotificationDao {
     private router: Router;

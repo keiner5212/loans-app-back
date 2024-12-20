@@ -1,4 +1,4 @@
-import { Credit, Status } from "../../entities/Credit";
+import { Credit, Status } from "@/entities/Credit";
 
 enum CreditPeriod {
     // monthly

@@ -1,9 +1,9 @@
 import { HttpStatusCode } from "axios";
-import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
-import { Credit, CreditType, Status } from "../entities/Credit";
-import { createDebugger } from "../utils/debugConfig";
-import { Financing } from "../entities/Financing";
-import { User } from "../entities/User";
+import { DaoResponse, ErrorControl } from "@/constants/ErrorControl";
+import { Credit, CreditType, Status } from "@/entities/Credit";
+import { createDebugger } from "@/utils/debugConfig";
+import { Financing } from "@/entities/Financing";
+import { User } from "@/entities/User";
 
 const log = createDebugger("CreditDAO");
 const logError = log.extend("error");

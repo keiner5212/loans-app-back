@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
-import { UserDAO } from "../dao/UserDAO";
-import { CreateUserBodyValidations } from "../middlewares/UserValidations";
-import { ErrorControl } from "../constants/ErrorControl";
-import { verifyToken } from "../middlewares/jwt";
-import { CheckCache } from "../middlewares/Cache";
+import { UserDAO } from "@/dao/UserDAO";
+import { CreateUserBodyValidations } from "@/middlewares/UserValidations";
+import { ErrorControl } from "@/constants/ErrorControl";
+import { verifyToken } from "@/middlewares/jwt";
+import { CheckCache } from "@/middlewares/Cache";
 import { HttpStatusCode } from "axios";
-import { isUserAdmin } from "../middlewares/Roles";
-import { Cache } from "../utils/cache";
+import { isUserAdmin } from "@/middlewares/Roles";
+import { Cache } from "@/utils/cache";
 
 export class UserController extends UserDAO {
 	private router: Router;

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { config } from "dotenv";
 import { HttpStatusCode } from "axios";
-import { createDebugger } from "../utils/debugConfig";
+import { createDebugger } from "@/utils/debugConfig";
 
 config();
 

@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express";
-import { CreditDao } from "../dao/CreditDAO";
-import { verifyToken } from "../middlewares/jwt";
-import { isUserAdmin, isUserRecovery } from "../middlewares/Roles";
-import { ErrorControl } from "../constants/ErrorControl";
-import { CheckCache } from "../middlewares/Cache";
-import { Cache } from "../utils/cache";
+import { CreditDao } from "@/dao/CreditDAO";
+import { verifyToken } from "@/middlewares/jwt";
+import { isUserAdmin, isUserRecovery } from "@/middlewares/Roles";
+import { ErrorControl } from "@/constants/ErrorControl";
+import { CheckCache } from "@/middlewares/Cache";
+import { Cache } from "@/utils/cache";
 
 export class CreditController extends CreditDao {
   private router: Router;

@@ -1,4 +1,4 @@
-import { getDeltaTime } from "./Time";
+import { getDeltaTime } from "@/utils/Time";
 
 
 export class Cache {

@@ -1,5 +1,5 @@
-import { decryptContent } from "../cryptography/encrypt";
-import { parseDate } from "../Time";
+import { decryptContent } from "@/utils/cryptography/encrypt";
+import { parseDate } from "@/utils/Time";
 
 export function verifyAppToken(encryptedToken: string): boolean {
     try {

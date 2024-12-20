@@ -8,7 +8,19 @@ export enum Config {
     //frecuencia de alertas
     ALERT_FREQUENCY = "ALERT_FREQUENCY",
     //firma
-    SIGNATURE = "SIGNATURE"
+    SIGNATURE = "SIGNATURE",
+    //logo
+    DOCUMENT_LOGO = "LOGO",
+    //nombre en documentos
+    DOCUMENT_NAME = "DOCUMENT_NAME",
+    //numero de registro
+    COMPANY_REGISTRATION = "COMPANY_REGISTRATION",
+    //direccion
+    COMPANY_ADDRESS = "COMPANY_ADDRESS",
+    //telefono
+    COMPANY_PHONE = "COMPANY_PHONE",
+    //correo
+    COMPANY_EMAIL = "COMPANY_EMAIL",
 }
 
 export enum ExpressServerConfig {

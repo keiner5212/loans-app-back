@@ -1,4 +1,5 @@
-import { convertMonthlyRate } from "../formats/Credits";
+import { convertMonthlyRate } from "@/utils/formats/Credit";
+
 
 interface AmortizationRow {
     periodo: number;
@@ -25,7 +26,7 @@ export const calcularTabla = (tasaInteres: number, deuda: number, pagoInicial: n
     const pagoPeriodo = calcularPago(tasaInteres, deuda, pagoInicial, periodos, CreditPeriod);
 
     let deudaActual = deudaRestante;
-    let tabla: AmortizationRow[] = [];
+    const tabla: AmortizationRow[] = [];
     let totalPagado = 0;
     let totalIntereses = 0;
     let totalAmortizado = 0;

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { ExpressServerConfig } from "../constants/Config";
+import { ExpressServerConfig } from "@/constants/Config";
 import multer from "multer";
 import fs from "fs/promises";
 import path from "path";

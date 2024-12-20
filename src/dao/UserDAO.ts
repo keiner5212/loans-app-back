@@ -1,19 +1,19 @@
 import { config } from "dotenv";
-import { User } from "../entities/User";
-import { createDebugger } from "../utils/debugConfig";
+import { User } from "@/entities/User";
+import { createDebugger } from "@/utils/debugConfig";
 import {
 	ComparePassword,
 	EncriptPassword,
-} from "../utils/cryptography/encrypt";
+} from "@/utils/cryptography/encrypt";
 import { sign } from "jsonwebtoken";
-import { MailService } from "../utils/Email/SendEmail";
-import { generateCode } from "../utils/Email/VerificationCode";
-import { Cache } from "../utils/cache";
-import { DaoResponse, ErrorControl } from "../constants/ErrorControl";
+import { MailService } from "@/utils/Email/SendEmail";
+import { generateCode } from "@/utils/Email/VerificationCode";
+import { Cache } from "@/utils/cache";
+import { DaoResponse, ErrorControl } from "@/constants/ErrorControl";
 import { HttpStatusCode } from "axios";
-import { Roles } from "../constants/Roles";
+import { Roles } from "@/constants/Roles";
 import path from "path";
-import { ExpressServerConfig } from "../constants/Config";
+import { ExpressServerConfig } from "@/constants/Config";
 import fs from "fs/promises";
 import { Op } from "sequelize";
 

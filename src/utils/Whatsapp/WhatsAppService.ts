@@ -1,7 +1,7 @@
 import { Client, LocalAuth, MessageMedia } from "whatsapp-web.js";
 import qrcode from "qrcode-terminal";
 import { config } from "dotenv";
-import { createDebugger } from "../debugConfig";
+import { createDebugger } from "@/utils/debugConfig";
 
 config();
 const log = createDebugger("whatsapp");

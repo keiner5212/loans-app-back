@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import { createDebugger } from '../debugConfig';
+import { createDebugger } from '@/utils/debugConfig';
 import { SendNotifications } from './NotificationTasks';
 
 const log = createDebugger("NotificationScheduler");
