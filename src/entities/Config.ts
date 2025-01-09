@@ -2,9 +2,9 @@ import { DataTypes, Model } from "sequelize";
 
 
 export class AppConfig extends Model {
-    public id?: number;
-    public key?: string;
-    public value?: string;
+    public id!: number;
+    public key!: string;
+    public value!: string;
 }
 
 export const configDDL = {

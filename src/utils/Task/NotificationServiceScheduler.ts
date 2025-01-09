@@ -20,7 +20,7 @@ export class NotificationServiceScheduler {
             timezone: "UTC"
         });
 
-        log('CronService initialized. Default interval: 1 day (24 hours)');
+        log('NotificationServiceScheduler initialized, task will run every 24 hours (utc midnight).');
     }
 
     // Singleton access method

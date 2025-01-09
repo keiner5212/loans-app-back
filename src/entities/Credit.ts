@@ -35,7 +35,7 @@ export enum CreditType {
  * field - `applicationDate` is the date when the credit was applied,
  */
 export class Credit extends Model {
-    public id?: number;
+    public id!: number;
     public userId!: number;
     public creditType!: string;
     public userCreatorId!: number;
@@ -49,8 +49,8 @@ export class Credit extends Model {
     public rejectedDate!: Date;
     public releasedDate!: Date;
     public finishedDate!: Date;
-    public lastPaymentDate!: Date;
-    public lastPaymentPeriod!: number;
+    public lastPaymentDate!: Date | null;
+    public lastPaymentPeriod!: number | null;
     public signedContract!: string;
 }
 

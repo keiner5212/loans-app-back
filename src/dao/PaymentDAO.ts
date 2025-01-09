@@ -21,7 +21,7 @@ export class PaymentDAO {
                     HttpStatusCode.NotFound,
                 ];
             }
-            credit.lastPaymentDate = new Date(payment.date);
+            credit.lastPaymentDate = payment.paymentDate || new Date();
             credit.lastPaymentPeriod = payment.period;
             await credit.save();
             const newPayment = await Payment.create(payment);

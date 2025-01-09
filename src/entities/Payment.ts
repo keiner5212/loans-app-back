@@ -6,6 +6,7 @@ export enum PaymentStatus {
     PENDING = "PENDING",
     LATE = "LATE",
     RELEASED = "RELEASED",
+    LATE_RELEASED = "LATE_RELEASED",
 }
 
 
@@ -18,17 +19,19 @@ export enum PaymentStatus {
  * field - `userCreatorId` is a foreign key to `User` model, is the employee who saved the payment,
  * field - `amount` is the amount of the payment,
  * field - `period` is the period of the payment,
- * field - `date` is the date of the payment,
- * 
+ * field - `status` is an indicator of the status of the payment,
+ * field - `paymentDate` is the date of the payment,
+ * field - `timelyPayment` is the date in which the payment must be made,
  */
 export class Payment extends Model {
     public id!: number
     public creditId!: number
-    public userCreatorId!: number
+    public userCreatorId!: number | null
     public amount!: number
     public period!: number
     public status!: string
-    public date!: Date
+    public paymentDate!: Date | null
+    public timelyPayment!: Date
 }
 
 
@@ -49,7 +52,7 @@ export const paymentDDL: ModelAttributes = {
     },
     userCreatorId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: User,
             key: 'id',
@@ -68,7 +71,11 @@ export const paymentDDL: ModelAttributes = {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    date: {
+    paymentDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    timelyPayment: {
         type: DataTypes.DATE,
         allowNull: false,
     },

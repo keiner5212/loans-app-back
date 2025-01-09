@@ -5,6 +5,8 @@ import { getLocalIP } from "@/utils/net/LocalIp";
 import { createDatabase, Migrations } from "@/service/Migrations";
 import { CronService } from "@/utils/Task/CronService";
 import { NotificationServiceScheduler } from "@/utils/Task/NotificationServiceScheduler";
+import { AppConfig } from "./entities/Config";
+import { AlertFrequency, Config } from "./constants/Config";
 
 // CONFIGURATION
 config();
@@ -23,6 +25,23 @@ setUpDatabase().then(() => {
     // task for send notification every 24 hours (default)
     const notificationTask = NotificationServiceScheduler.getInstance();
     notificationTask.start();
+    // change interval based on config
+    AppConfig.findOne({ where: { key: Config.ALERT_FREQUENCY } }).then((config) => {
+        if (!config) {
+            return;
+        }
+        switch (config.value) {
+            case AlertFrequency.DAILY:
+                notificationTask.setDaily();
+                break;
+            case AlertFrequency.WEEKLY:
+                notificationTask.setWeekly();
+                break;
+            case AlertFrequency.MONTHLY:
+                notificationTask.setMonthly();
+                break;
+        }
+    })
     // APP
     const app = new App().config();
 
