@@ -3,6 +3,8 @@ import { verifyToken } from "@/middlewares/jwt";
 import { isUserMaster } from "@/middlewares/Roles";
 import { ErrorControl } from "@/constants/ErrorControl";
 import { ConfigDao } from "@/dao/ConfigDAO";
+import { AlertFrequency, Config } from "@/constants/Config";
+import { NotificationServiceScheduler } from "@/utils/Task/NotificationServiceScheduler";
 
 export class ConfigController extends ConfigDao {
     private router: Router;
@@ -38,6 +40,21 @@ export class ConfigController extends ConfigDao {
             async (req: Request, res: Response) => {
                 const { key, value } = req.body;
                 const data = await ConfigDao.SetConfig(key, value);
+                if (key == Config.ALERT_FREQUENCY) {
+                    const notificationTask = NotificationServiceScheduler.getInstance();
+                    switch (value) {
+                        case AlertFrequency.DAILY:
+                            notificationTask.setDaily();
+                            break;
+                        case AlertFrequency.WEEKLY:
+                            notificationTask.setWeekly();
+                            break;
+                        case AlertFrequency.MONTHLY:
+                            notificationTask.setMonthly();
+                            break;
+                    }
+                }
+                console.log(data);
                 if (data[0] === ErrorControl.SUCCESS) {
                     return res
                         .status(data[2])
@@ -46,6 +63,7 @@ export class ConfigController extends ConfigDao {
                             data: data[1],
                         });
                 }
+
                 return res.status(data[2]).send(data[1]);
             }
         );

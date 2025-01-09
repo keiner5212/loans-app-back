@@ -13,7 +13,7 @@ export class NotificationServiceScheduler {
 
     private constructor() {
         this.isRunning = false;
-        this.currentInterval = '0 0 * * *'; // Runs every 24 hours by default (at midnight)
+        this.currentInterval = '0 0 * * *'; // Runs every 24 hours by default (UTC midnight)
 
         this.task = cron.schedule(this.currentInterval, this.runTask.bind(this), {
             scheduled: false,
@@ -62,20 +62,39 @@ export class NotificationServiceScheduler {
         this.task.stop();
     }
 
-    // Change the cron job interval in hours
-    public setInterval(hours: number) {
-        const newInterval = `0 */${hours} * * *`;
-        if (newInterval !== this.currentInterval) {
-            log(`Changing interval to every ${hours} hours.`);
-            this.stop();
-            this.currentInterval = newInterval;
-            this.task = cron.schedule(this.currentInterval, this.runTask.bind(this), {
-                scheduled: false,
-                timezone: "UTC"
-            });
-            this.start(); // Restart the task with the new interval
-        } else {
-            log('Interval is already set to this value.');
+    // Change interval to weekly
+    public setWeekly() {
+        log('Changing interval to weekly...');
+        this.changeInterval('0 0 * * 0'); // Runs every Sunday at midnight UTC
+    }
+
+    // Change interval to daily (24 hours)
+    public setDaily() {
+        log('Changing interval to daily...');
+        this.changeInterval('0 0 * * *'); // Runs every day at midnight UTC
+    }
+
+    // Change interval to monthly
+    public setMonthly() {
+        log('Changing interval to monthly...');
+        this.changeInterval('0 0 1 * *'); // Runs on the 1st of each month at midnight UTC
+    }
+
+    // General method to change the cron schedule
+    private changeInterval(newInterval: string) {
+        if (this.currentInterval === newInterval) {
+            log('Interval is already set to the specified value. No changes made.');
+            return;
         }
+
+        this.stop(); // Stop the current task
+        this.task = cron.schedule(newInterval, this.runTask.bind(this), {
+            scheduled: false,
+            timezone: "UTC"
+        });
+        this.currentInterval = newInterval; // Update the current interval
+        this.start(); // Restart the task with the new schedule
+
+        log(`Interval successfully changed to: ${newInterval}`);
     }
 }

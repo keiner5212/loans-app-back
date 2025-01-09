@@ -2,6 +2,12 @@ import { DataTypes, Model, ModelAttributes } from "sequelize"
 import { Credit } from "./Credit"
 import { User } from "./User"
 
+export enum PaymentStatus {
+    PENDING = "PENDING",
+    LATE = "LATE",
+    RELEASED = "RELEASED",
+}
+
 
 /**
  * Payment model
@@ -21,6 +27,7 @@ export class Payment extends Model {
     public userCreatorId!: number
     public amount!: number
     public period!: number
+    public status!: string
     public date!: Date
 }
 
@@ -55,6 +62,10 @@ export const paymentDDL: ModelAttributes = {
     },
     period: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    status: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
     date: {

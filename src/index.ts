@@ -29,7 +29,6 @@ setUpDatabase().then(() => {
     // DEBUGGER
     const serverDebugger = createDebugger('server');
 
-
     // LISTEN
     app.listen(PORT, () => {
         const ip = getLocalIP();

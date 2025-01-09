@@ -27,3 +27,9 @@ export enum ExpressServerConfig {
     MAX_FILE_SIZE = 10 * 1024 * 1024, // 10MB
     STORAGE_PATH = "uploads",
 }
+
+export enum AlertFrequency {
+    DAILY = "Daily",
+    WEEKLY = "Weekly",
+    MONTHLY = "Monthly",
+}

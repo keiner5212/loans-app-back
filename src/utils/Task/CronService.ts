@@ -13,14 +13,14 @@ export class CronService {
 
     private constructor() {
         this.isRunning = false;
-        this.currentInterval = '0 0 * * *'; // Runs every 24 hours by default (at midnight)
+        this.currentInterval = '0 0 * * *'; // Runs every 24 hours (utc midnight)
 
         this.task = cron.schedule(this.currentInterval, this.runTask.bind(this), {
             scheduled: false,
             timezone: "UTC"
         });
 
-        log('CronService initialized. Default interval: 1 day (24 hours)');
+        log('CronService initialized, task will run every 24 hours (utc midnight).');
     }
 
     // Singleton access method
@@ -60,22 +60,5 @@ export class CronService {
     public stop() {
         log('Stopping cron job...');
         this.task.stop();
-    }
-
-    // Change the cron job interval in hours
-    public setInterval(hours: number) {
-        const newInterval = `0 */${hours} * * *`;
-        if (newInterval !== this.currentInterval) {
-            log(`Changing interval to every ${hours} hours.`);
-            this.stop();
-            this.currentInterval = newInterval;
-            this.task = cron.schedule(this.currentInterval, this.runTask.bind(this), {
-                scheduled: false,
-                timezone: "UTC"
-            });
-            this.start(); // Restart the task with the new interval
-        } else {
-            log('Interval is already set to this value.');
-        }
     }
 }
