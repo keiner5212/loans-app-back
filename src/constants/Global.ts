@@ -1,3 +1,3 @@
-export class Global{
-    
+export const Global={
+    appName: ""
 }

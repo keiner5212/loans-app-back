@@ -41,6 +41,7 @@ export async function SendNotifications() {
             // Compose message
             const companyName = companyInfo[Config.DOCUMENT_NAME] || "Company Name";
             const companyPhone = companyInfo[Config.COMPANY_PHONE] || "No phone available";
+            const companyEmail = companyInfo[Config.COMPANY_EMAIL] || "No email available";
 
             const emailMessage = `
                 Dear ${user.name},
@@ -54,7 +55,7 @@ export async function SendNotifications() {
                 For any questions, please contact us:
                 - Phone: ${companyPhone}
                 - Email: ${companyInfo[Config.COMPANY_EMAIL] || "No email available"}
-                - Address: ${companyInfo[Config.COMPANY_ADDRESS] || "No address available"}
+                - Address: ${companyEmail}
 
                 Thank you for your attention.
 
@@ -68,7 +69,7 @@ export async function SendNotifications() {
 
                     ${pendingDetails}
 
-                    Contact us at ${companyPhone} if you have any questions.
+                    Contact us at ${companyPhone} or email us at ${companyEmail} if you have any questions.
 
                     Thank you, ${companyName}`;
 

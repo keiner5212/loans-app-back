@@ -7,6 +7,7 @@ import { CronService } from "@/utils/Task/CronService";
 import { NotificationServiceScheduler } from "@/utils/Task/NotificationServiceScheduler";
 import { AppConfig } from "./entities/Config";
 import { AlertFrequency, Config } from "./constants/Config";
+import { Global } from "./constants/Global";
 
 // CONFIGURATION
 config();
@@ -18,18 +19,23 @@ async function setUpDatabase() {
     await Migrations();
 }
 
-setUpDatabase().then(() => {
+setUpDatabase().then(async () => {
+    // set up the globals
+
+    const companyName = await AppConfig.findOne({ where: { key: Config.DOCUMENT_NAME } })
+    Global.appName = companyName?.value || process.env.APP_NAME || "";
+
     // task for update database status and more every 24 hours
     const cronService = CronService.getInstance();
     cronService.start();
+
     // task for send notification every 24 hours (default)
     const notificationTask = NotificationServiceScheduler.getInstance();
     notificationTask.start();
+
     // change interval based on config
-    AppConfig.findOne({ where: { key: Config.ALERT_FREQUENCY } }).then((config) => {
-        if (!config) {
-            return;
-        }
+    const config = await AppConfig.findOne({ where: { key: Config.ALERT_FREQUENCY } })
+    if (config) {
         switch (config.value) {
             case AlertFrequency.DAILY:
                 notificationTask.setDaily();
@@ -41,7 +47,8 @@ setUpDatabase().then(() => {
                 notificationTask.setMonthly();
                 break;
         }
-    })
+    }
+
     // APP
     const app = new App().config();
 
