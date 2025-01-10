@@ -140,6 +140,26 @@ export class CreditController extends CreditDao {
       );
     });
 
+    //cancel a credit
+    this.router.put("/cancel/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
+      const id = parseInt(req.params.id);
+      const { reason } = req.body;
+      const data = await CreditDao.cancel(id, reason);
+      if (data[0] === ErrorControl.SUCCESS) {
+        return res
+          .status(data[2])
+          .json(
+            {
+              message: "Credit canceled successfully",
+              content: data[1]
+            }
+          );
+      }
+      return res.status(data[2]).json(
+        { data: data[1] }
+      );
+    });
+
     // save signed contract
     this.router.put("/contract/:id", verifyToken, isUserRecovery, async (req: Request, res: Response) => {
       const id = parseInt(req.params.id);

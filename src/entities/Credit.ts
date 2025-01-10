@@ -14,6 +14,8 @@ export enum Status {
     LATE = "LATE",
     //terminado
     FINISHED = "FINISHED",
+    //cancelado
+    CANCELED = "CANCELED",
 }
 
 export enum CreditType {
@@ -39,6 +41,7 @@ export enum CreditType {
  * field - `rejectedDate` is the date when the credit was rejected,
  * field - `releasedDate` is the date when the credit was released,
  * field - `finishedDate` is the date when the credit was finished,
+ * field - `finishedMessage` is the message when the credit was finished,
  * field - `lastPaymentDate` is the date when the last payment was made,
  * field - `lastPaymentPeriod` is the period of the last payment,
  */
@@ -59,6 +62,7 @@ export class Credit extends Model {
     public rejectedDate!: Date;
     public releasedDate!: Date;
     public finishedDate!: Date;
+    public finishedMessage!: string | null | undefined;
     public lastPaymentDate!: Date | null;
     public lastPaymentPeriod!: number | null;
     public signedContract!: string;
@@ -143,6 +147,11 @@ export const creditDDL: ModelAttributes = {
     finishedDate: {
         type: DataTypes.DATE,
         allowNull: true,
+    },
+    finishedMessage: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
     },
     lastPaymentDate: {
         type: DataTypes.DATE,

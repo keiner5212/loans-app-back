@@ -52,6 +52,7 @@ export class PaymentDAO {
             } else {
                 if (credit.yearsOfPayment * credit.period == payment.period) {
                     credit.status = Status.FINISHED;
+                    credit.finishedMessage = "Credit finished";
                 } else {
                     credit.status = Status.RELEASED;
                 }

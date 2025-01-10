@@ -26,6 +26,33 @@ export class CreditDao {
         }
     }
 
+    //cancel credit (put the status to CANCELED and the requested amount to 0)
+    protected static async cancel(id_credit: number, reason: string): Promise<DaoResponse> {
+        try {
+            const credit = await Credit.findOne({ where: { id: id_credit } });
+            if (!credit) {
+                return [
+                    ErrorControl.PERSONALIZED,
+                    "Credit not found",
+                    HttpStatusCode.NotFound,
+                ];
+            }
+            credit.status = Status.CANCELED;
+            credit.finishedDate = new Date();
+            credit.finishedMessage = reason;
+            await credit.save();
+            return [ErrorControl.SUCCESS, credit, HttpStatusCode.Ok];
+        } catch (error) {
+            const msg = "Error in cancel credit";
+            logError(msg + ": " + error);
+            return [
+                ErrorControl.ERROR,
+                msg,
+                HttpStatusCode.InternalServerError,
+            ];
+        }
+    }
+
     protected static async saveContract(id: number, contract: string): Promise<DaoResponse> {
         try {
             const credit = await Credit.findOne({ where: { id } });
