@@ -5,12 +5,11 @@ export function formatUtcToLocal(utcDateStr: string | undefined | null, locale: 
 
     return localDate.toLocaleString(locale, {
         year: "numeric",
-        month: "long",
+        month: "short",
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit",
         timeZone: timeZone,
-        timeZoneName: "short",
+        timeZoneName: "shortOffset",
     });
 }

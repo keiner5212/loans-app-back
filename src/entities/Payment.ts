@@ -26,7 +26,7 @@ export enum PaymentStatus {
 export class Payment extends Model {
     public id!: number
     public creditId!: number
-    public userCreatorId!: number | null
+    public userCreatorId!: number | null | undefined
     public amount!: number
     public period!: number
     public status!: string

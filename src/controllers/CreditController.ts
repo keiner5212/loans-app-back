@@ -30,7 +30,9 @@ export class CreditController extends CreditDao {
               data: data[1],
             })
         }
-        return res.status(data[2]).send(data[1]);
+        return res.status(data[2]).json(
+          { data: data[1] }
+        );
       }
     );
 
@@ -54,7 +56,9 @@ export class CreditController extends CreditDao {
               data: data[1],
             })
         }
-        return res.status(data[2]).send(data[1]);
+        return res.status(data[2]).json(
+          { data: data[1] }
+        );
       }
     );
 
@@ -74,7 +78,9 @@ export class CreditController extends CreditDao {
               data: data[1],
             })
         }
-        return res.status(data[2]).send(data[1]);
+        return res.status(data[2]).json(
+          { data: data[1] }
+        );
       });
 
     // get credit contract info 
@@ -129,7 +135,9 @@ export class CreditController extends CreditDao {
             }
           );
       }
-      return res.status(data[2]).send(data[1]);
+      return res.status(data[2]).json(
+        { data: data[1] }
+      );
     });
 
     // save signed contract
@@ -144,7 +152,9 @@ export class CreditController extends CreditDao {
             content: data[1]
           });
       }
-      return res.status(data[2]).send(data[1]);
+      return res.status(data[2]).json(
+        { data: data[1] }
+      );
     });
 
     this.router.put(
@@ -159,7 +169,9 @@ export class CreditController extends CreditDao {
             .status(data[2])
             .send("Credit aproved successfully: " + data[1]);
         }
-        return res.status(data[2]).send(data[1]);
+        return res.status(data[2]).json(
+          { data: data[1] }
+        );
       }
     );
 
@@ -175,7 +187,9 @@ export class CreditController extends CreditDao {
             .status(data[2])
             .send("Credit rejected successfully: " + data[1]);
         }
-        return res.status(data[2]).send(data[1]);
+        return res.status(data[2]).json(
+          { data: data[1] }
+        );
       }
     );
 
@@ -187,7 +201,9 @@ export class CreditController extends CreditDao {
           .status(data[2])
           .send("Credit updated successfully: " + data[1]);
       }
-      return res.status(data[2]).send(data[1]);
+      return res.status(data[2]).json(
+        { data: data[1] }
+      );
     });
 
     this.router.delete(
@@ -202,7 +218,9 @@ export class CreditController extends CreditDao {
             .status(data[2])
             .send("Credit deleted successfully: " + data[1]);
         }
-        return res.status(data[2]).send(data[1]);
+        return res.status(data[2]).json(
+          { data: data[1] }
+        );
       }
     );
 

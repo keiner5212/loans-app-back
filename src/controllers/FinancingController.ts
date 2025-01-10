@@ -32,7 +32,9 @@ export class FinancingController extends FinancingDAO {
               }
             )
         }
-        return res.status(data[2]).send(data[1]);
+        return res.status(data[2]).json(
+          { data: data[1] }
+        );
       });
 
     this.router.get("/:id",
@@ -54,7 +56,9 @@ export class FinancingController extends FinancingDAO {
               }
             )
         }
-        return res.status(data[2]).send(data[1]);
+        return res.status(data[2]).json(
+          { data: data[1] }
+        );
       });
 
     this.router.post("/", async (req: Request, res: Response) => {
@@ -64,7 +68,9 @@ export class FinancingController extends FinancingDAO {
           .status(data[2])
           .send("Financing created successfully: " + data[1]);
       }
-      return res.status(data[2]).send(data[1]);
+      return res.status(data[2]).json(
+        { data: data[1] }
+      );
     });
 
     this.router.put("/:id", async (req: Request, res: Response) => {
@@ -75,7 +81,9 @@ export class FinancingController extends FinancingDAO {
           .status(data[2])
           .send("Financing updated successfully: " + data[1]);
       }
-      return res.status(data[2]).send(data[1]);
+      return res.status(data[2]).json(
+        { data: data[1] }
+      );
     });
 
     this.router.delete("/:id", async (req: Request, res: Response) => {
@@ -86,7 +94,9 @@ export class FinancingController extends FinancingDAO {
           .status(data[2])
           .send("Financing deleted successfully: " + data[1]);
       }
-      return res.status(data[2]).send(data[1]);
+      return res.status(data[2]).json(
+        { data: data[1] }
+      );
     });
 
     return this.router;

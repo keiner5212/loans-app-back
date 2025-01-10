@@ -29,7 +29,9 @@ export class ConfigController extends ConfigDao {
                             data: data[1],
                         });
                 }
-                return res.status(data[2]).send(data[1]);
+                return res.status(data[2]).json(
+                    { data: data[1] }
+                );
             }
         );
 
@@ -64,7 +66,9 @@ export class ConfigController extends ConfigDao {
                         });
                 }
 
-                return res.status(data[2]).send(data[1]);
+                return res.status(data[2]).json(
+                    { data: data[1] }
+                );
             }
         );
 
@@ -80,7 +84,9 @@ export class ConfigController extends ConfigDao {
                         .status(data[2])
                         .send("Credit deleted successfully: " + data[1]);
                 }
-                return res.status(data[2]).send(data[1]);
+                return res.status(data[2]).json(
+                    { data: data[1] }
+                );
             }
         );
 

@@ -14,7 +14,7 @@ enum CreditPeriod {
 }
 
 // Function to calculate the time difference in days, months, weeks, or bi-weekly periods
-function calculateTimeDiff(lastDate: Date, today: Date, period: CreditPeriod): number {
+export function calculateTimeDiff(lastDate: Date, today: Date, period: CreditPeriod): number {
     const diffTime = today.getTime() - lastDate.getTime();
     const diffDays = diffTime / (1000 * 3600 * 24); // Days
 
@@ -30,9 +30,9 @@ function calculateTimeDiff(lastDate: Date, today: Date, period: CreditPeriod): n
     }
 }
 
-function calculateNextPaymentDate(lastPaymentDate: Date, period: CreditPeriod): Date {
+export function calculateNextPaymentDate(lastPaymentDate: Date, period: CreditPeriod): Date | null {
     if (!lastPaymentDate || isNaN(lastPaymentDate.getTime())) {
-        throw new Error("Invalid lastPaymentDate provided.");
+        return null;
     }
 
     const nextPaymentDate = new Date(lastPaymentDate);
@@ -104,6 +104,10 @@ export async function updateCreditStatus() {
         }
 
         const nextPaymentDate = calculateNextPaymentDate(lastPaymentDateRelative, credit.period);
+
+        if (!nextPaymentDate) {
+            continue;
+        }
 
         if (nextPaymentDate > today) {
             // next payment is in the future, check if theres a pending payment

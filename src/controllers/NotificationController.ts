@@ -19,7 +19,9 @@ export class NotificationController extends NotificationDao {
             if (data[0] === ErrorControl.SUCCESS) {
                 return res.status(data[2]).json({ message: "WhatsApp notification sent successfully", data: data[1] });
             }
-            return res.status(data[2]).send(data[1]);
+            return res.status(data[2]).json(
+                { data: data[1] }
+            );
         });
 
         this.router.post("/email", verifyToken, isUserAdmin, async (req: Request, res: Response) => {
@@ -28,7 +30,9 @@ export class NotificationController extends NotificationDao {
             if (data[0] === ErrorControl.SUCCESS) {
                 return res.status(data[2]).json({ message: "Email notification sent successfully", data: data[1] });
             }
-            return res.status(data[2]).send(data[1]);
+            return res.status(data[2]).json(
+                { data: data[1] }
+            );
         });
 
         return this.router;

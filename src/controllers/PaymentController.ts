@@ -29,7 +29,9 @@ export class PaymentController extends PaymentDAO {
                             data: data[1],
                         })
                 }
-                return res.status(data[2]).send(data[1]);
+                return res.status(data[2]).json(
+                    { data: data[1] }
+                );
             }
         );
 
@@ -49,18 +51,38 @@ export class PaymentController extends PaymentDAO {
                             data: data[1],
                         })
                 }
-                return res.status(data[2]).send(data[1]);
+                return res.status(data[2]).json(
+                    { data: data[1] }
+                );
             });
 
         this.router.post("/", async (req: Request, res: Response) => {
-            const data = await PaymentDAO.add(req.body);
+            const { payment_id, employee_id } = req.body;
+            const data = await PaymentDAO.pay(payment_id, employee_id);
             if (data[0] === ErrorControl.SUCCESS) {
                 return res
                     .status(data[2])
-                    .send("Payment created successfully: " + data[1]);
+                    .send("Payment Paid successfully: " + data[1]);
             }
-            return res.status(data[2]).send(data[1]);
+            return res.status(data[2]).json(
+                { data: data[1] }
+            );
         });
+
+        this.router.put("/updateStatus/:creditId", async (req: Request, res: Response) => {
+            const creditId = parseInt(req.params.creditId);
+            if (!creditId) return res.status(400).json({ message: "Credit ID is required" });
+            const data = await PaymentDAO.updateCreditStatusById(creditId);
+            if (data[0] === ErrorControl.SUCCESS) {
+                return res
+                    .status(data[2]).json(
+                        { data: data[1] }
+                    )
+            }
+            return res.status(data[2]).json(
+                { data: data[1] }
+            );
+        })
 
         this.router.put("/:id", async (req: Request, res: Response) => {
             const id = parseInt(req.params.id);
@@ -70,7 +92,9 @@ export class PaymentController extends PaymentDAO {
                     .status(data[2])
                     .send("Payment updated successfully: " + data[1]);
             }
-            return res.status(data[2]).send(data[1]);
+            return res.status(data[2]).json(
+                { data: data[1] }
+            );
         });
 
         this.router.delete("/:id", async (req: Request, res: Response) => {
@@ -81,7 +105,9 @@ export class PaymentController extends PaymentDAO {
                     .status(data[2])
                     .send("Payment deleted successfully: " + data[1]);
             }
-            return res.status(data[2]).send(data[1]);
+            return res.status(data[2]).json(
+                { data: data[1] }
+            );
         });
 
 
