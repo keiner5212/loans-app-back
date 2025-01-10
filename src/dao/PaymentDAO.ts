@@ -142,12 +142,17 @@ export class PaymentDAO {
             ];
         }
 
+        if (![Status.RELEASED, Status.LATE].includes(credit.status as Status)) {
+            return [
+                ErrorControl.PERSONALIZED,
+                "Credit not released or late",
+                HttpStatusCode.NotFound,
+            ]
+        }
+
         const today = new Date();
-        log("today: " + today);
         const lastPaymentDate = credit.lastPaymentDate ? credit.lastPaymentDate : credit.releasedDate;
-        log("lastPaymentDate: " + lastPaymentDate);
         const diffTime = calculateTimeDiff(lastPaymentDate, today, credit.period);
-        log("diffTime: " + diffTime);
 
         // Check if the credit is overdue
         if (diffTime >= 1 && credit.status !== Status.LATE) {
