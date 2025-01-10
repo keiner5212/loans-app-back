@@ -31,7 +31,6 @@ export class PaymentController extends PaymentDAO {
                 }
                 return res.status(data[2]).send(data[1]);
             }
-
         );
 
         this.router.get("/:id",

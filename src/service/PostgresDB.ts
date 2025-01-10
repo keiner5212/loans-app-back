@@ -25,7 +25,7 @@ export class PostgresService {
 			host: postgresConfig.host,
 			port: postgresConfig.port,
 			dialect: postgresConfig.dialect as any,
-			logging: () => {},
+			logging: () => { },
 		});
 
 		this.connect();
@@ -75,7 +75,10 @@ export class PostgresService {
 
 	public static async sync(): Promise<void> {
 		try {
-			await PostgresService.getInstance().sequelize.sync({ alter: true });
+			await PostgresService.getInstance().sequelize.sync({
+				alter: true,
+				// force: true 
+			});
 			log('Database synced');
 		} catch (error) {
 			logError('Error syncing the database:', error);

@@ -207,10 +207,10 @@ export class UserDAO {
 				const master = masters[0];
 				if (master.email !== "admin@admin.admin") {
 					await mailService.sendMail({
-						from: mailService.fromDefault,
+						from: MailService.fromDefault,
 						to: master.email,
 						subject: "Forgot password code",
-						text: "The user " + email + " requested a password reset, code: " + code,
+						textHTML: "<p>The user " + email + " requested a password reset, code: " + code + "</p>",
 					});
 				} else {
 					return [ErrorControl.PERSONALIZED, "There is no master user, can't send email to the default user", HttpStatusCode.BadRequest];
@@ -219,10 +219,10 @@ export class UserDAO {
 				for (const master of masters) {
 					if (master.email !== "admin@admin.admin") {
 						await mailService.sendMail({
-							from: mailService.fromDefault,
+							from: MailService.fromDefault,
 							to: master.email,
 							subject: "Forgot password code",
-							text: "The user " + email + " requested a password reset, code: " + code,
+							textHTML: "<p>The user " + email + " requested a password reset, code: " + code + "</p>",
 						});
 					}
 				}
@@ -230,10 +230,10 @@ export class UserDAO {
 
 			// Send and advice via email
 			const info = await mailService.sendMail({
-				from: mailService.fromDefault,
+				from: MailService.fromDefault,
 				to: email,
 				subject: "Forgot password",
-				text: "You are trying to reset your password, your code, reach out an master user to get the verification",
+				textHTML: "<p>You are trying to reset your password, your code, reach out an master user to get the verification</p>",
 			});
 
 			// Check if the email was sent successfully

@@ -1,7 +1,6 @@
 import nodemailer, { Transporter } from "nodemailer";
 import { config } from "dotenv";
 import { createDebugger } from "@/utils/debugConfig";
-import { Global } from "@/constants/Global";
 
 config();
 const log = createDebugger("mailer");
@@ -11,17 +10,17 @@ interface MailOptions {
 	from: string;
 	to: string;
 	subject: string;
-	text: string;
+	textHTML: string;
 }
 
 
 export class MailService {
 	private static instance: MailService;
 	private transporter: Transporter;
-	private appName: string = "";
-	public fromDefault: string = "";
+	public static appName: string = "";
+	public static fromDefault: string = "";
 
-	private constructor(appName: string) {
+	private constructor() {
 		// Configure Nodemailer transport
 		this.transporter = nodemailer.createTransport({
 			host: "smtp.gmail.com",
@@ -32,9 +31,6 @@ export class MailService {
 				pass: process.env.EMAIL_PASS,
 			},
 		});
-		this.appName = appName;
-
-		this.fromDefault = `${appName} <${process.env.EMAIL_USER}>`;
 
 		// Verify connection configuration
 		this.transporter.verify((error) => {
@@ -49,7 +45,7 @@ export class MailService {
 	// Singleton access method
 	public static getInstance(): MailService {
 		if (!MailService.instance) {
-			MailService.instance = new MailService(Global.appName);
+			MailService.instance = new MailService();
 		}
 		return MailService.instance;
 	}
@@ -62,13 +58,13 @@ export class MailService {
 				to: mailOptions.to,
 				subject: mailOptions.subject,
 				html: `
-					<h1>${this.appName}</h1>
-					<p>Hello from ${this.appName}, you have a new message:</p>
+					<h1>${MailService.appName}</h1>
+					<p>Hello from ${MailService.appName}, you have a new message:</p>
 					<br>
-					<p>${mailOptions.text}</p>
+					<div>${mailOptions.textHTML}</div>
 					<br>
 					<p>Regards,</p>
-					<p>${this.appName} Team</p>
+					<p>${MailService.appName} Team</p>
 					`,
 			};
 

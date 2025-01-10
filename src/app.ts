@@ -11,6 +11,7 @@ import { verifyAppTokenMiddleware } from "@/middlewares/appToken";
 import { ConfigController } from "@/controllers/ConfigController";
 import { FilesController } from "@/controllers/FilesController";
 import { NotificationController } from "@/controllers/NotificationController";
+import { TestController } from "./controllers/TestController";
 
 config();
 
@@ -62,6 +63,8 @@ export class App {
 		this.app.use(this.prefix + "/financing", new FinancingController().routes());
 		this.app.use(this.prefix + "/files", new FilesController().routes());
 		this.app.use(this.prefix + "/notification", new NotificationController().routes());
+		//test route
+		this.app.use(this.prefix + "/test", new TestController().routes());
 	}
 
 	private NotFound() {

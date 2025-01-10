@@ -41,7 +41,7 @@ export class NotificationDao {
      */
     protected static async sendEmailNotification(to: string, subject: string, text: string): Promise<DaoResponse> {
         try {
-            const [success, response] = await mailService.sendMail({ from: mailService.fromDefault, to, subject, text });
+            const [success, response] = await mailService.sendMail({ from: MailService.fromDefault, to, subject, textHTML: text });
             if (success) {
                 return [ErrorControl.SUCCESS, response, 200];
             }

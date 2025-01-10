@@ -7,7 +7,7 @@ import { CronService } from "@/utils/Task/CronService";
 import { NotificationServiceScheduler } from "@/utils/Task/NotificationServiceScheduler";
 import { AppConfig } from "./entities/Config";
 import { AlertFrequency, Config } from "./constants/Config";
-import { Global } from "./constants/Global";
+import { MailService } from "./utils/Email/SendEmail";
 
 // CONFIGURATION
 config();
@@ -20,10 +20,13 @@ async function setUpDatabase() {
 }
 
 setUpDatabase().then(async () => {
-    // set up the globals
 
-    const companyName = await AppConfig.findOne({ where: { key: Config.DOCUMENT_NAME } })
-    Global.appName = companyName?.value || process.env.APP_NAME || "";
+    AppConfig.findOne({ where: { key: Config.DOCUMENT_NAME } }).then((config) => {
+        if (config) {
+            MailService.appName = config.value;
+            MailService.fromDefault = `${config.value} <${process.env.EMAIL_USER}>`;
+        }
+    })
 
     // task for update database status and more every 24 hours
     const cronService = CronService.getInstance();

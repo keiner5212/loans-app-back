@@ -89,7 +89,7 @@ export class PaymentDAO {
         }
     }
 
-    //get payments by and credit id
+    // get payments by and credit id
 
     protected static async getPaymentByCreditId(creditId: number): Promise<DaoResponse> {
         try {
@@ -105,5 +105,4 @@ export class PaymentDAO {
             ];
         }
     }
-
 }
