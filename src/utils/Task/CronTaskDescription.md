@@ -19,8 +19,7 @@
 
 #### **6. Calcular la Fecha del Próximo Pago**
    - Dependiendo de la diferencia de tiempo (`diffTime`), se determina la fecha del próximo pago:
-     - Si solo un pago está atrasado (diferencia de 1 periodo), la fecha del último pago se usa como referencia para calcular la siguiente.
-     - Si hay más de un pago atrasado, se obtiene el último pago atrasado y se usa para calcular la fecha del siguiente pago.
+     - Si hay pagos atrasados, se obtiene el último pago atrasado y se usa para calcular la fecha del siguiente pago.
      - Si no hay pagos atrasados, se usa la fecha del último pago como base para el cálculo.
 
 #### **7. Verificar si Ya Existe un Pago Pendiente para el Próximo Período**

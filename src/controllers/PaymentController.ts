@@ -57,8 +57,8 @@ export class PaymentController extends PaymentDAO {
             });
 
         this.router.post("/", async (req: Request, res: Response) => {
-            const { payment_id, employee_id } = req.body;
-            const data = await PaymentDAO.pay(payment_id, employee_id);
+            const { payment_id, employee_id, late_amount } = req.body;
+            const data = await PaymentDAO.pay(payment_id, employee_id, late_amount);
             if (data[0] === ErrorControl.SUCCESS) {
                 return res
                     .status(data[2])

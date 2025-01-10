@@ -17,6 +17,7 @@ export enum PaymentStatus {
  * field - `creditId` is a foreign key to `Credit` model,
  * field - `userId` is a foreign key to `User` model, is the user who made the payment,
  * field - `userCreatorId` is a foreign key to `User` model, is the employee who saved the payment,
+ * field - `lateAmount` is the amount paid by interest for the late payment,
  * field - `amount` is the amount of the payment,
  * field - `period` is the period of the payment,
  * field - `status` is an indicator of the status of the payment,
@@ -27,6 +28,7 @@ export class Payment extends Model {
     public id!: number
     public creditId!: number
     public userCreatorId!: number | null | undefined
+    public lateAmount!: number
     public amount!: number
     public period!: number
     public status!: string
@@ -58,6 +60,11 @@ export const paymentDDL: ModelAttributes = {
             key: 'id',
         },
         onDelete: 'CASCADE',
+    },
+    lateAmount: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+        defaultValue: 0,
     },
     amount: {
         type: DataTypes.DECIMAL(10, 2),

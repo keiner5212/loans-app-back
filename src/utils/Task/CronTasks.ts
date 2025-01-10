@@ -75,32 +75,22 @@ export async function updateCreditStatus() {
             await credit.save(); // Save the updated credit
         }
 
-        // update status to payments
-        const payments = await Payment.findAll({ where: { creditId: credit.id, status: PaymentStatus.PENDING } });
-
-        for (const payment of payments) {
-            const paymentDate = new Date(payment.timelyPayment);
-            if (paymentDate < today) {
-                // payment is late
-                payment.status = PaymentStatus.LATE;
-            }
-            await payment.save();
-        }
 
         // create the next payment if does not exist
         let lastPaymentPeriod = credit.lastPaymentPeriod ? credit.lastPaymentPeriod : 0;
         let lastPaymentDateRelative = undefined;
 
-        if (diffTime >= 1 && diffTime < 2) { // only one payment late
-            lastPaymentDateRelative = lastPaymentDate
-        } else if (diffTime >= 2) { // more than one payment late
-            // get last late payment
-            const payment = await Payment.findOne({ where: { creditId: credit.id, status: PaymentStatus.LATE }, order: [['timelyPayment', 'DESC']] });
-            lastPaymentDateRelative = payment ? payment.timelyPayment : lastPaymentDate;
-            lastPaymentPeriod = payment ? payment.period : lastPaymentPeriod;
+        if (diffTime >= 1) {
+            // one o more than one payments late
+            const lastLatePayment = await Payment.findOne({
+                where: { creditId: credit.id, status: PaymentStatus.LATE },
+                order: [["timelyPayment", "DESC"]],
+            });
+            lastPaymentDateRelative = lastLatePayment ? lastLatePayment.timelyPayment : lastPaymentDate;
+            lastPaymentPeriod = lastLatePayment ? lastLatePayment.period : lastPaymentPeriod;
         } else {
-            // not late
-            lastPaymentDateRelative = lastPaymentDate
+            // Not late
+            lastPaymentDateRelative = lastPaymentDate;
         }
 
         const nextPaymentDate = calculateNextPaymentDate(lastPaymentDateRelative, credit.period);
@@ -137,5 +127,16 @@ export async function updateCreditStatus() {
 
         await Payment.create(paymentToCreate);
 
+        // update status to payments
+        const payments = await Payment.findAll({ where: { creditId: credit.id, status: PaymentStatus.PENDING } });
+
+        for (const payment of payments) {
+            const paymentDate = payment.timelyPayment
+            if (paymentDate < today) {
+                // Payment is late
+                payment.status = PaymentStatus.LATE;
+            }
+            await payment.save();
+        }
     }
 }

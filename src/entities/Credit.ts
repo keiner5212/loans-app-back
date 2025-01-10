@@ -28,11 +28,19 @@ export enum CreditType {
  * field - `userId` is a foreign key to `User` model, is the user who applied for the credit,
  * field - `userCreatorId` is a foreign key to `User` model, is the employee who created the credit application,
  * field - `requestedAmount` is the amount requested for the credit,
+ * field - `approvedAmount` is the amount approved for the credit,
+ * field - `lateInterest` is the late interest of the credit,
  * field - `interestRate` is the interest rate of the credit,
  * field - `yearsOfPayment` is the years of payment of the credit,
  * field - `period` is the period of the credit,
  * field - `status` is an indicator of the status of the credit,
  * field - `applicationDate` is the date when the credit was applied,
+ * field - `aprovedDate` is the date when the credit was approved,
+ * field - `rejectedDate` is the date when the credit was rejected,
+ * field - `releasedDate` is the date when the credit was released,
+ * field - `finishedDate` is the date when the credit was finished,
+ * field - `lastPaymentDate` is the date when the last payment was made,
+ * field - `lastPaymentPeriod` is the period of the last payment,
  */
 export class Credit extends Model {
     public id!: number;
@@ -40,6 +48,8 @@ export class Credit extends Model {
     public creditType!: string;
     public userCreatorId!: number;
     public requestedAmount!: number;
+    public approvedAmount!: number;
+    public lateInterest!: number;
     public interestRate!: number;
     public yearsOfPayment!: number;
     public period!: number;
@@ -87,6 +97,16 @@ export const creditDDL: ModelAttributes = {
     requestedAmount: {
         type: DataTypes.DOUBLE,
         allowNull: false,
+    },
+    approvedAmount: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        defaultValue: 0,
+    },
+    lateInterest: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        defaultValue: 0,
     },
     interestRate: {
         type: DataTypes.DOUBLE,

@@ -15,7 +15,7 @@ const logError = log.extend("error");
 
 export class PaymentDAO {
 
-    protected static async pay(paymentID: number, EmployeeID: number): Promise<DaoResponse> {
+    protected static async pay(paymentID: number, EmployeeID: number, lateAmount: number): Promise<DaoResponse> {
         try {
             const payment = await Payment.findByPk(paymentID);
             if (!payment) {
@@ -32,18 +32,29 @@ export class PaymentDAO {
             }
 
             payment.userCreatorId = user.id;
-            payment.status = PaymentStatus.RELEASED;
+            if (payment.status == PaymentStatus.LATE) {
+                payment.status = PaymentStatus.LATE_RELEASED;
+            } else {
+                payment.status = PaymentStatus.RELEASED;
+            }
+            payment.lateAmount = lateAmount;
             payment.paymentDate = new Date();
             await payment.save();
 
             credit.lastPaymentDate = payment.paymentDate;
             credit.lastPaymentPeriod = payment.period;
+            credit.approvedAmount = (credit.approvedAmount || 0) + payment.amount;
+            credit.lateInterest = (credit.lateInterest || 0) + lateAmount;
 
             const LatePayments = await Payment.findAll({ where: { creditId: credit.id, status: PaymentStatus.LATE } });
             if (LatePayments.length > 0) {
                 credit.status = Status.LATE;
             } else {
-                credit.status = Status.RELEASED;
+                if (credit.yearsOfPayment * credit.period == payment.period) {
+                    credit.status = Status.FINISHED;
+                } else {
+                    credit.status = Status.RELEASED;
+                }
             }
 
             await credit.save();
@@ -160,27 +171,12 @@ export class PaymentDAO {
             await credit.save(); // Save the updated credit
         }
 
-        // Update status of payments
-        const payments = await Payment.findAll({ where: { creditId: credit.id, status: PaymentStatus.PENDING } });
-
-        for (const payment of payments) {
-            const paymentDate = new Date(payment.timelyPayment);
-            if (paymentDate < today) {
-                // Payment is late
-                payment.status = PaymentStatus.LATE;
-            }
-            await payment.save();
-        }
-
         // Determine last payment details
         let lastPaymentPeriod = credit.lastPaymentPeriod || 0;
         let lastPaymentDateRelative;
 
-        if (diffTime >= 1 && diffTime < 2) {
-            // Only one payment late
-            lastPaymentDateRelative = lastPaymentDate;
-        } else if (diffTime >= 2) {
-            // More than one payment late
+        if (diffTime >= 1) {
+            // one o more than one payments late
             const lastLatePayment = await Payment.findOne({
                 where: { creditId: credit.id, status: PaymentStatus.LATE },
                 order: [["timelyPayment", "DESC"]],
@@ -236,6 +232,20 @@ export class PaymentDAO {
         };
 
         await Payment.create(paymentToCreate);
+
+
+        // Update status of payments
+        const payments = await Payment.findAll({ where: { creditId: credit.id, status: PaymentStatus.PENDING } });
+
+        for (const payment of payments) {
+            const paymentDate = payment.timelyPayment
+            if (paymentDate < today) {
+                // Payment is late
+                payment.status = PaymentStatus.LATE;
+            }
+            await payment.save();
+        }
+
 
         return [
             ErrorControl.SUCCESS,
