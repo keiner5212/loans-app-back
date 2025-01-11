@@ -14,8 +14,8 @@ export const calcularPago = (tasaInteres: number, deuda: number, pagoInicial: nu
     const tasaPeriodo = convertMonthlyRate(tasaInteres, CreditPeriod); // Convertir tasa mensual a especifica
     const deudaRestante = deuda - pagoInicial; // Deuda luego del pago inicial
     const pagoPeriodo = (deudaRestante * tasaPeriodo * Math.pow(1 + tasaPeriodo, periodos)) / (Math.pow(1 + tasaPeriodo, periodos) - 1); // Calcular pago mensual
-    // Redondear hacia arriba a 4 decimales
-    const rounded = Math.ceil(parseFloat((pagoPeriodo * 10000).toFixed(1))) / 10000;
+    // Redondear hacia arriba a 2 decimales
+    const rounded = Math.ceil(parseFloat((pagoPeriodo * 100).toFixed(1))) / 100;
     return rounded;
 }
 

@@ -43,7 +43,7 @@ export class PaymentDAO {
 
             credit.lastPaymentDate = payment.paymentDate;
             credit.lastPaymentPeriod = payment.period;
-            credit.approvedAmount = (credit.approvedAmount || 0) + payment.amount;
+            credit.approvedAmount = parseFloat(credit.approvedAmount.toString() || "0") + parseFloat(payment.amount.toString());
             credit.lateInterest = (credit.lateInterest || 0) + lateAmount;
 
             const LatePayments = await Payment.findAll({ where: { creditId: credit.id, status: PaymentStatus.LATE } });
