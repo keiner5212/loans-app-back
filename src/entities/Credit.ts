@@ -3,24 +3,25 @@ import { User } from "./User";
 
 export enum Status {
     //pendiente
-    PENDING = "PENDING",
+    PENDING = "Pendiente",
     //aprobado
-    APPROVED = "APPROVED",
+    APPROVED = "Aprovado",
     //rechazado
-    REJECTED = "REJECTED",
+    REJECTED = "Rechazado",
     //desembolsado
-    RELEASED = "RELEASED",
+    RELEASED = "Desembolsado",
     //atrasado
-    LATE = "LATE",
+    LATE = "Atrasado",
     //terminado
-    FINISHED = "FINISHED",
+    FINISHED = "Terminado",
     //cancelado
-    CANCELED = "CANCELED",
+    CANCELED = "Cancelado",
 }
 
+
 export enum CreditType {
-    CREDIT = "CREDIT",
-    FINANCING = "FINANCING",
+    CREDIT = "Credito",
+    FINANCING = "Financiamiento",
 }
 
 /**

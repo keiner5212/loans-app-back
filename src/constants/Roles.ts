@@ -8,9 +8,9 @@ e)	Usuario Cliente: no tieene derechos de acceso,solo representa a un usuario qu
 */
 
 export enum Roles {
-    USER_CLIENT = 'CLIENT',
-    USER_RECOVERY = 'USER_RECOVERY',
-    USER_COLLOCATION = 'USER_COLLOCATION',
-    USER_ADMIN = 'USER_ADMIN',
-    USER_MASTER = 'USER_MASTER',
+    USER_CLIENT = 'Cliente',
+    USER_RECOVERY = 'Usuario Recuperación',
+    USER_COLLOCATION = 'Usuario Colocación',
+    USER_ADMIN = 'Usuario Administrador',
+    USER_MASTER = 'Usuario Maestro',
 }

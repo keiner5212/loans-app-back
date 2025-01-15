@@ -3,10 +3,10 @@ import { Credit } from "./Credit"
 import { User } from "./User"
 
 export enum PaymentStatus {
-    PENDING = "PENDING",
-    LATE = "LATE",
-    RELEASED = "RELEASED",
-    LATE_RELEASED = "LATE_RELEASED",
+    PENDING = "Pendiente",
+    LATE = "Atrasado",
+    RELEASED = "Pagado",
+    LATE_RELEASED = "Pagado atrasado",
 }
 
 
