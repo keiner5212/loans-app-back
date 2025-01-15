@@ -12,6 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@faker-js/faker": "^9.4.0",
     "axios": "1.7.2",
     "bcryptjs": "2.4.3",
     "compression": "1.7.4",

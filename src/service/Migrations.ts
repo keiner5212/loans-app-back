@@ -8,6 +8,7 @@ import { Payment, paymentDDL } from "@/entities/Payment";
 import { seedUsers } from "./seed/UserSeed";
 import { AppConfig, configDDL } from "@/entities/Config";
 import { seedConfig } from "./seed/ConfigSeed";
+import { seedFake } from "./seed/testingSeed";
 
 
 const log = createDebugger('migrations');

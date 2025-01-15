@@ -4,7 +4,7 @@ import { calcularPago } from "../amortizacion/Credit";
 import { Financing } from "@/entities/Financing";
 import { Op } from "sequelize";
 
-enum CreditPeriod {
+export enum CreditPeriod {
     // monthly
     MONTHLY = 12,
     // weekly
