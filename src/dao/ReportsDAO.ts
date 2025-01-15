@@ -64,7 +64,11 @@ export class ReportsDAO {
         }
 
         if (data) {
-            const creditsOfUser = await Credit.findAll({ where: { userId: data } });
+            const user = await User.findOne({ where: { [Op.or]: [{ email: data }, { document: data }] } });
+            if (!user) {
+                return [];
+            }
+            const creditsOfUser = await Credit.findAll({ where: { userId: user.id } });
             whereClause.creditId = { [Op.in]: creditsOfUser.map((credit) => credit.id) };
         }
 
