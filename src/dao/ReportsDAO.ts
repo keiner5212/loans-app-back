@@ -76,8 +76,9 @@ export class ReportsDAO {
 
         return Promise.all(payments.map(async (payment) => {
             const credit = await Credit.findByPk(payment.creditId);
+            const user = await User.findByPk(credit?.userId);
             const financing = await Financing.findOne({ where: { creditId: credit?.id } });
-            return { payment, credit, financing };
+            return { payment, credit, financing, user };
         }));
     }
 
@@ -105,7 +106,7 @@ export class ReportsDAO {
 
         return Promise.all(credits.map(async (credit) => {
             const user = await User.findByPk(credit.userId);
-            const financing = creditType === CreditType.FINANCING ?
+            const financing = credit.creditType == CreditType.FINANCING ?
                 await Financing.findOne({ where: { creditId: credit.id } }) :
                 null;
 
